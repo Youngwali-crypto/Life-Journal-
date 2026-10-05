@@ -496,38 +496,110 @@ Possible themes include:
 
 ## Chapter I — Branching Out
 
-Chapter I focuses on exploration.
+Chapter I focuses on **discovery and exploration**.
 
-The Main Character begins trying different things and learning more about themselves.
+The Main Character is encouraged to branch out, try new experiences, meet new people, and begin learning what they like and dislike. Life Journal should collect story context without deciding the Sim's identity for the player.
 
-Current objective areas include:
+### Opening Phase — Getting to Know Me
 
-1. Find at least two friends
-2. Discover a favorite hobby and reach Level 4
-3. Find a career path
-4. Choose a major if attending university
-5. Invite a Sim out
-6. Shop for new clothes or explore a new look
-7. Declare My Circle
-8. Complete the First Journal Entry
+Current discovery objectives include:
 
-These currently represent objective areas rather than a finalized mandatory sequence.
+1. Find Your Favorite Music Genre
+2. Make 3 New Acquaintances
+3. Discover Your Favorite Social Venue
+4. Discover Your Hobbies
+5. Find Your Style
 
-The objective system may dynamically determine which objectives appear and when they appear.
+These objectives are intended to be small, low-pressure ways to learn more about the Sim.
 
-The First Journal Entry may occur earlier in the chapter and help determine which areas the Main Character initially wants to explore.
+Chapter I should follow the pattern:
+
+**Explore → Experience → Reflect**
+
+Discoveries are not permanent conclusions. Trying something once does not mean the Sim must like it forever.
+
+### Experience Phase
+
+Later Chapter I objectives should use information gathered during the opening phase.
+
+Examples include:
+
+- Spend more time with new acquaintances to learn which relationships may become important.
+- Experience a discovered hobby more deeply before deciding whether to develop it.
+- Return to social environments the Sim appeared to enjoy.
+- Try a new look in everyday gameplay and decide whether it feels right.
+- Use music preferences and other discoveries as personalization variables in future objectives.
+
+The player should be allowed to conclude that a person, hobby, place, or style is not right for their Sim. That is still meaningful self-discovery.
 
 ---
 
-## Chapter II — Outside Noise
+## Chapter II — Choosing My Lane
 
-Chapter II responds heavily to what happened during Branching Out.
+Chapter II focuses on **choice and emerging direction**.
 
-The Main Character has begun discovering what they want.
+Rather than giving every player the same fixed objective list, Life Journal should respond to the Main Character's actual gameplay.
 
-Now other influences begin challenging those decisions.
+### Locked Chapter II Rule
 
-Possible influences include:
+> **Chapter II objectives are dynamically generated from the Sim's interactions, relationships, repeated behaviors, and emerging routes rather than being delivered as a fixed objective list.**
+
+Possible emerging routes may include:
+
+- Friendship / My Circle
+- Romance
+- Hobby / Passion
+- Career
+- Education
+- Lifestyle
+- Personal growth
+
+Routes do not necessarily need to be selected from a menu. They may emerge through gameplay.
+
+For example:
+
+- Repeatedly spending time with one acquaintance may strengthen a Friendship or My Circle route.
+- Flirting, dating, or pursuing a specific Sim may strengthen a Romance route.
+- Repeatedly returning to an activity may strengthen a Hobby or Passion route.
+- Work and career behavior may create a Career route.
+- University or school behavior may strengthen an Education route.
+
+Multiple routes may develop at the same time.
+
+Chapter I discoveries should inform Chapter II, but they should **not lock the Sim into an earlier answer**. If the Sim appeared interested in gaming during Chapter I but repeatedly chooses cooking during Chapter II, Life Journal should be capable of responding to that change.
+
+### My Circle Development
+
+The acquaintances met during Chapter I may receive small relationship-focused objectives during Chapter II.
+
+The purpose is to help the player determine whether these Sims actually belong in the Main Character's life.
+
+Possible outcomes include:
+
+- Add someone to My Circle
+- Continue getting to know them
+- Decide they are not a good fit
+- Choose nobody yet
+
+Not choosing someone should not automatically count as failure.
+
+### Chapter II Purpose
+
+By the end of Chapter II, Life Journal should have enough meaningful gameplay context to understand which people, interests, ambitions, and lifestyle choices are becoming important to the Main Character.
+
+These emerging routes become story material for the next chapter.
+
+---
+
+## Chapter III — Outside Noise
+
+Chapter III is where the choices and routes developed during Chapters I and II begin producing stronger story consequences.
+
+The central question becomes:
+
+> **Now that I am beginning to understand what I want, what happens when life and other people push back?**
+
+Possible outside influences include:
 
 - Friends
 - Family
@@ -536,11 +608,18 @@ Possible influences include:
 - Social groups
 - Online or cultural influence
 
-The central question becomes:
+Chapter III should use the Main Character's established routes to generate relevant:
 
-> Now that I am beginning to understand what I want, how much influence should everyone else have over my decisions?
+- Hiccups
+- Hurdles
+- Crossroads
+- Side Stories
+- Relationship developments
+- Competing priorities
 
-Chapter II objectives, Hiccups, Hurdles, Crossroads, and Side Stories should be influenced by Chapter I whenever possible.
+For example, a strong friendship route may create friendship conflicts or support moments. A career route may begin competing with relationships or hobbies. Two strong routes may collide and create a Crossroad.
+
+Outside Noise should therefore feel like a continuation of the player's story rather than randomly generated drama.
 
 Later chapters have not yet been finalized.
 
