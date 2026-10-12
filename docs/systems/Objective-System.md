@@ -428,6 +428,8 @@ Finding My Lane uses "Find Two Friends" as one of its early Objective concepts.
 
 Conceptually:
 
+This is a simplified technical prototype example. Its Chapter I placement tests the core loop; the full Blueprint's friendship objectives follow the chapter design described below.
+
 Objective ID:
 FML_CH1_FIND_TWO_FRIENDS
 
@@ -669,31 +671,57 @@ They should not reduce endings to a visible score.
 
 ---
 
-# Finding My Lane — Current Chapter I Objective Areas
+# Finding My Lane — Objective Areas by Chapter
 
-The current design contains eight major Objective areas:
+The current chapter structure follows the [Life Journal Overview](../Life-Journal-Overview.md#first-story-blueprint).
 
-1. Find at least two friends
+## Chapter I — Branching Out
 
-2. Discover a favorite hobby and reach Level 4
+Chapter I focuses on discovery and exploration through the pattern:
 
-3. Find a career path
+**Explore → Experience → Reflect**
 
-4. Choose a Major if attending University
+The opening discovery objectives are:
 
-5. Invite a Sim out
+1. Find Your Favorite Music Genre
+2. Make 3 New Acquaintances
+3. Discover Your Favorite Social Venue
+4. Discover Your Hobbies
+5. Find Your Style
 
-6. Shop for new clothes or explore a new look
+Later Chapter I objectives build on these discoveries. Trying an activity, meeting someone, or exploring a style does not permanently commit the Sim to that choice.
 
-7. Declare My Circle
+The First Journal Entry may occur early and influence exploration without locking the Sim into a route.
 
-8. Complete the First Journal Entry
+## Chapter II — Choosing My Lane
 
-These are currently design concepts.
+Chapter II focuses on choice and emerging direction.
 
-They are not finalized as eight mandatory Objectives appearing in a fixed sequence.
+Objectives are dynamically generated from the Main Character's interactions, relationships, repeated behaviors, and emerging routes. They are not delivered as one fixed checklist.
 
-The Objective System may adapt their order, replace incompatible Objectives, or use them as parts of larger Objective chains.
+Possible objective areas include:
+
+- Develop acquaintances into meaningful friendships.
+- Deepen an emerging hobby, potentially toward Level 4.
+- Explore a career direction.
+- Explore a Major when attending University.
+- Invite a Sim out when relevant to an emerging relationship route.
+- Revisit personal style or lifestyle choices.
+- Decide who belongs in My Circle, including choosing nobody yet.
+
+These are possible objective areas, not mandatory tasks for every Sim. Chapter I discoveries inform them, but later behavior may change the story direction. Multiple routes may develop at the same time.
+
+## Chapter III — Outside Noise
+
+Chapter III brings stronger consequences to the choices and routes developed during Chapters I and II.
+
+Objectives should respond to relevant Hiccups, Hurdles, Crossroads, relationship developments, and competing priorities. They should follow the established story context rather than introduce unrelated drama.
+
+Later chapters have not yet been finalized.
+
+## Prototype Scope
+
+The technical prototype may use a simplified Chapter I friendship objective to prove progress detection and Journal recording. That test does not replace the full chapter design or make Chapter II's dynamic objectives a fixed Chapter I checklist.
 
 ---
 
