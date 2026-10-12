@@ -6,17 +6,25 @@ Status: Design draft. No gameplay implementation.
 
 This document expands the existing concepts in the [Life Journal Overview](../Life-Journal-Overview.md) and [Story Blueprint System](Story%20Blueprint-System.md).
 
-Existing core principles are preserved. New timing ranges, event examples, escalation thresholds, and scheduling rules below are proposals for review, not finalized decisions or verified Sims 4 capabilities.
+The approved core definitions below supersede the earlier draft wording. New timing ranges, event examples, escalation thresholds, and scheduling rules below are proposals for review, not finalized decisions or verified Sims 4 capabilities.
 
-## Core distinctions
+## Approved core definitions
 
-| System | Story purpose | Player experience |
-| --- | --- | --- |
-| Hiccup | A smaller, short-term complication | Something needs attention; the story can continue through several responses. |
-| Hurdle | A significant obstacle or ongoing conflict | The Sim must adapt, seek support, change direction, or live with an unresolved issue. |
-| Crossroad | A meaningful decision between reasonable paths | The player chooses what matters now, with tradeoffs that can shape later events. |
+These definitions were approved by the project owner. Timing, thresholds, scheduling, and event examples remain draft proposals.
 
-A Hiccup does not always escalate. A Hurdle can arise without a preceding Hiccup. A Crossroad can occur during either complication or during ordinary story progression.
+| System | Approved concept |
+| --- | --- |
+| Hiccup | A slight problem that can grow into a bigger issue or become a meaningful experience—even a good memory. |
+| Hurdle | A severe problem that puts the player at an ultimatum. Their choice heavily affects the story. |
+| Crossroad | A less severe, multiple-choice decision that contributes to a shift in the story. |
+
+A Hiccup is a slight problem that can grow into a bigger issue or become a meaningful experience—even a good memory. How the Sim gets through it can strengthen their story.
+
+A Hurdle is a severe problem that puts the player at an ultimatum. The choice they make heavily affects the story they are creating and can reshape its direction.
+
+A Crossroad is a less severe, multiple-choice decision that contributes to a shift in the story. It can open different opportunities and matter over time without carrying the immediate stakes of a Hurdle.
+
+A Hiccup does not always escalate. A Hurdle can arise without a preceding Hiccup. A Hurdle may present multiple responses, but its severity and heavy impact distinguish it from a Crossroad. Crossroads are not the generic name for every decision, including a Hurdle's ultimatum.
 
 Choices should create context, not a visible good-versus-bad score.
 
@@ -26,7 +34,7 @@ Choices should create context, not a visible good-versus-bad score.
 | --- | --- |
 | I — Branching Out | Keep discovery low pressure. Any complication should support exploration rather than establish major outside conflict. |
 | II — Choosing My Lane | Introduce smaller Hiccups and early Crossroads tied to emerging friendships, interests, career, education, or romance. |
-| III — Outside Noise | Use established routes and earlier decisions to create stronger Hurdles, competing priorities, and consequential Crossroads. |
+| III — Outside Noise | Use established routes and earlier decisions to create severe Hurdles and story-shifting Crossroads, while keeping their stakes distinct. |
 
 Chapter III should feel like a shift because meaningful choices begin producing stronger consequences. It should not generate unrelated drama simply because a chapter changed.
 
@@ -67,7 +75,7 @@ A Hiccup may offer responses such as:
 - Set a boundary.
 - Let the opportunity pass.
 
-Letting something pass is not automatically failure. The consequence should match what the Sim actually missed or left unresolved.
+Letting something pass is not automatically failure. A Hiccup can become a larger problem, but getting through it can also strengthen the story, bring Sims closer, or create a good memory. The consequence should match the actual experience.
 
 ### Draft Chapter II examples
 
@@ -92,7 +100,7 @@ Before escalation, explain the unresolved pattern to the player. A single ordina
 
 ### Proposed resolution rules
 
-A Hurdle should support several responses and may involve a sequence of objectives.
+A Hurdle must establish a severe problem and a clear ultimatum whose options heavily affect the story. Supporting objectives may follow the decision, but resolving a task list alone does not define a Hurdle.
 
 Use **2–5 Sim days** as a provisional range for a manageable multi-step response, only when a deadline serves the story. Some conflicts should instead remain active until a relevant milestone or resolution. Do not force every Hurdle onto a timer.
 
@@ -107,18 +115,23 @@ These are narrative outcomes, not a ranking of the player.
 
 ### Draft Chapter III examples
 
-| Hurdle | Relevant trigger | Reasonable paths | Possible story change |
-| --- | --- | --- | --- |
-| My Circle Is Pulling Me Apart | Repeated conflicting expectations among relevant Circle members. | Bring people together, maintain separate friendships, set boundaries, step back. | Change who receives attention or belongs in My Circle; generate relationship objectives. |
-| This Lane Is Costing Me | A strong career or education route repeatedly conflicts with another valued route. | Reduce commitments, seek support, renegotiate priorities, explore another direction. | Adapt the current route rather than treating a change of mind as defeat. |
-| Support With Conditions | A relevant Sim repeatedly offers support only if the Main Character follows their preferred path. | Accept the arrangement, negotiate, seek independent support, decline. | Affect reliance, boundaries, and later relationship events. |
-| The Interest Nobody Takes Seriously | A chosen hobby repeatedly receives dismissive responses in established story events. | Keep pursuing it, find a supportive community, explain its value, reconsider it. | Develop independence, new relationships, or a different interest. |
+These illustrate the approved severity; individual triggers and outcomes remain proposals.
+
+| Hurdle | Severe problem and ultimatum | Choices and heavy story effects |
+| --- | --- | --- |
+| Them or Me | A partner demands that the Main Character stop seeing someone in My Circle. | Protect the friendship, prioritize the partner, or reject the demand and risk the relationship. The outcome can change a central relationship or Circle membership. |
+| This Lane Is Costing Me | An established career or education commitment has reached a point where continuing threatens another essential commitment. | Protect the current path, sacrifice it for the other commitment, or attempt a risky renegotiation. Each outcome must meaningfully change the story. |
+| Support With Conditions | Essential support is about to be withdrawn unless the Sim gives up a chosen direction. | Accept the condition, give up the support to preserve the chosen path, or challenge the arrangement with a real risk of losing it. |
+
+Ordinary disagreement or competing plans alone should remain a Hiccup or Crossroad. They become Hurdle material only when a severe problem and consequential ultimatum are established.
 
 Story consequences and actual game effects must be distinguished. A Journal record or follow-up objective does not automatically change a relationship score, career, or academic result.
 
 ## Crossroads
 
 ### Choice rules
+
+Crossroads stay less severe than Hurdles. They contribute to a shift through multiple-choice decisions about opportunities, preferences, and emerging priorities.
 
 Present two to four understandable options where practical. Explain the immediate commitment without revealing exact ending formulas.
 
@@ -168,16 +181,16 @@ Chapter II or III. Requires two relationships with competing needs.
 
 Follow-up should depend on expectations and actions, not assume every unchosen Sim becomes hostile.
 
-### Draft Crossroad 4 — Keep Going, or Change Direction?
+### Draft Crossroad 4 — What Do I Want to Explore Next?
 
-Chapter III. Requires a developed route that has encountered a meaningful Hurdle.
+Chapter II or III. The Sim has emerging interests and room to explore.
 
-- Continue with a revised plan.
-- Seek help before deciding.
-- Explore an alternative while retaining the current route.
-- Step away and begin a different direction.
+- Spend more time with a new friend.
+- Explore a hobby.
+- Attend a career event.
+- Try something unfamiliar.
 
-Both persistence and changing direction can lead to legitimate endings.
+Each choice can make a different objective or opportunity relevant. This is an opportunity to shift direction, not a severe ultimatum.
 
 ## Scheduling and player control — proposals
 
@@ -198,19 +211,13 @@ Ending evaluation may consider patterns of choices and outcomes across the Bluep
 
 ## Design walkthrough
 
-Chapter II: The Sim repeatedly pursues painting and develops a friendship.
+A cancelled plan creates a Hiccup. The Sim spends the evening with a new acquaintance instead, and the experience can become a good memory or the beginning of an important friendship.
 
-A Comment That Sticks introduces a friend's dismissive response as a clearly identified story event.
+Later, a Crossroad offers choices about how to spend time: deepen that friendship, explore a hobby, or attend a career event. Each contributes to a shift without imposing severe stakes.
 
-The player explains why painting matters and completes the follow-up conversation objective.
+If a partner later demands that the Sim stop seeing that friend or lose the relationship, the story has reached a Hurdle. The ultimatum threatens something important, and the response heavily affects the story.
 
-The Journal records the response. The event resolves; escalation is unnecessary.
-
-If similar dismissive events remain unresolved later, Chapter III may make The Interest Nobody Takes Seriously eligible.
-
-That Hurdle can introduce Is This My Lane, or Their Plan? A revised plan, supportive new relationship, or changed interest can all be meaningful outcomes.
-
-This is an illustrative path, not a mandatory sequence.
+These are illustrations of the three definitions, not a mandatory sequence. Final events and gameplay detection still require design and research.
 
 ## Open decisions and technical research
 
