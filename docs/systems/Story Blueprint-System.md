@@ -166,7 +166,7 @@ Challenge the choices and routes developed during Chapters I and II through rela
 Later Chapters:
 Not yet finalized.
 
-The [Life Journal Overview](../Life-Journal-Overview.md#first-story-blueprint) contains the current Finding My Lane chapter design. This example summarizes that design; other Blueprints may use different chapter structures.
+The [Life Journal Overview](../Life-Journal-Overview.md) contains the current Finding My Lane chapter design. This example summarizes that design; other Blueprints may use different chapter structures.
 
 ---
 
