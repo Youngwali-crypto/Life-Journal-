@@ -152,13 +152,21 @@ Purpose:
 Explore different parts of life and begin discovering what the Main Character wants.
 
 Chapter II:
+Choosing My Lane
+
+Purpose:
+Develop choices and emerging direction through objectives generated from the Main Character's interactions, relationships, repeated behaviors, and emerging routes. Chapter I discoveries inform this chapter without permanently locking the Sim into a path.
+
+Chapter III:
 Outside Noise
 
 Purpose:
-Challenge those discoveries through relationships, pressure, opinions, and outside influence.
+Challenge the choices and routes developed during Chapters I and II through relationships, pressure, opinions, and outside influence. Use those established routes to generate relevant Hiccups, Hurdles, Crossroads, and stronger story consequences.
 
 Later Chapters:
 Not yet finalized.
+
+The [Life Journal Overview](../Life-Journal-Overview.md#first-story-blueprint) contains the current Finding My Lane chapter design. This example summarizes that design; other Blueprints may use different chapter structures.
 
 ---
 
