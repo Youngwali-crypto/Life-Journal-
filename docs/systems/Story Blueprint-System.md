@@ -231,62 +231,37 @@ The Objective System handles objective tracking and completion.
 
 # Hiccups
 
-Blueprints may define Hiccups appropriate to their story themes.
+A Hiccup is a slight problem that can grow into a bigger issue or become a meaningful experience—even a good memory. How the Sim gets through it can strengthen their story.
 
-Hiccups represent smaller complications that may require attention.
+A Hiccup may lead to a larger problem, growth, a stronger relationship, or a positive experience the Sim can look back on. Resolving it should preserve what the experience contributed to the story rather than simply erase the problem.
 
-Example:
+Example: A plan falls apart, but spending the evening with a new acquaintance becomes the beginning of an important friendship.
 
-Finding My Lane
-→ University path active
-→ Main Character neglects coursework
-→ Falling Behind Hiccup becomes eligible
-
-Hiccups should respond to the Main Character's story rather than appear completely at random.
+Not every Hiccup becomes a Hurdle. Timing and escalation mechanics remain proposals.
 
 ---
 
 # Hurdles
 
-Blueprints may define larger complications called Hurdles.
+A Hurdle is a severe problem that puts the player at an ultimatum. The choice they make heavily affects the story they are creating and can reshape its direction.
 
-Hurdles may result from:
+A Hurdle threatens something important and asks the player what the Main Character is willing to protect, sacrifice, or change. Its defining feature is the severity of the problem and the weight of the decision, rather than how long it takes to resolve.
 
-- Repeated Hiccups
-- Major decisions
-- Relationship patterns
-- Story events
-- Chapter transitions
-- Repeated gameplay behavior
+Example: A partner demands that the Sim stop seeing someone in My Circle. Protecting the friendship, prioritizing the relationship, or rejecting the ultimatum can each significantly change the story.
 
-Hurdles should create meaningful story changes rather than functioning only as punishment.
+A Hurdle may have multiple responses without becoming a lower-stakes Crossroad. Outcomes should meaningfully reflect the player's choice.
 
 ---
 
 # Crossroads
 
-Blueprints may define interactive story decisions called Crossroads.
+A Crossroad is a less severe, multiple-choice decision that contributes to a shift in the story. It can open different opportunities and matter over time without carrying the immediate stakes of a Hurdle.
 
-Crossroads should present multiple reasonable options.
+Crossroads present multiple reasonable options. Their role is to contribute to direction and opportunity, while Hurdles place the player at a severe story-changing ultimatum. Multiple-choice presentation alone does not make a Hurdle a Crossroad.
 
-Example:
+Example: Choose whether to spend the evening with a new friend, explore a hobby, or attend a career event. Each option can develop a different part of the Sim's story.
 
-Same Night, Different Plans
-
-The Main Character has a networking opportunity.
-
-Their friends want to go clubbing.
-
-Possible choices:
-
-- Go with friends
-- Attend the networking event
-- Attempt both
-- Wait for friends
-
-The Blueprint may track the decision and use it to influence future events.
-
-Crossroads should generally avoid one hidden universally correct answer.
+See the [Hiccups, Hurdles, and Crossroads System](Hiccups-Hurdles-Crossroads-System.md) for the approved definitions and draft mechanics.
 
 ---
 
