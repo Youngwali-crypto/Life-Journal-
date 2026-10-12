@@ -449,6 +449,16 @@ Chapter I focuses on **discovery and exploration**.
 
 The Main Character is encouraged to branch out, try new experiences, meet new people, and begin learning what they like and dislike. Life Journal should collect story context without deciding the Sim's identity for the player.
 
+### Discovery Information and Chapter II
+
+Chapter I is about getting to know the Sim through gameplay. Their interactions with people, things, activities, venues, and other experiences develop information that Chapter II uses to generate more direct objectives.
+
+For example, repeatedly interacting with an acquaintance may lead to an invitation objective; repeatedly choosing painting may lead to deeper hobby exploration; returning to a venue may lead to sharing it with a friend. These are possible connections, not a fixed checklist or permanent route assignment.
+
+**Chapter I discovers and learns about the Sim. Chapter II uses those discoveries to give the story more direct objectives.**
+
+See the [Finding My Lane Blueprint Plan](Finding-My-Lane-Blueprint.md) for the dedicated story plan and illustrative connections.
+
 ### Opening Phase — Getting to Know Me
 
 Current discovery objectives include:
