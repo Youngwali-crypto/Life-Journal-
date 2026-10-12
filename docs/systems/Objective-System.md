@@ -673,7 +673,7 @@ They should not reduce endings to a visible score.
 
 # Finding My Lane — Objective Areas by Chapter
 
-The current chapter structure follows the [Life Journal Overview](../Life-Journal-Overview.md#first-story-blueprint).
+The current chapter structure follows the [Life Journal Overview](../Life-Journal-Overview.md).
 
 ## Chapter I — Branching Out
 
