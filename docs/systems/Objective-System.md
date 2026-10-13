@@ -134,7 +134,9 @@ Other outcomes may include:
 
 Active
 → Time limit expires
-→ Expired
+→ Expired (only where the Blueprint explicitly makes the opportunity unavailable)
+
+For Finding My Lane, an unfinished required Objective instead remains available with an overdue deadline. Overdue is timing information, not automatic failure or removal.
 
 or:
 
@@ -333,6 +335,26 @@ A player should not necessarily need to complete every Objective to experience a
 
 ---
 
+# Finding My Lane — Approved Progression and Reveal Rules
+
+The [Finding My Lane plan](../Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules) defines the approved rules for this Blueprint:
+
+- Each chapter has more required Objectives than optional Objectives; exact counts remain undecided.
+- Complete all required Objectives for the selected chapter path to make the next chapter ready. Optional Objectives do not block the transition.
+- Time passing alone does not advance the chapter.
+- Each Objective has an individual, realistic Sim-day deadline. Short actions may take one day; skills and relationship development need longer.
+- Progress within the allotted time does not trigger an objective-related Hiccup merely because the Objective remains unfinished.
+- Inactivity alone does not automatically trigger an objective-related Hiccup before its deadline.
+- An unmet deadline can introduce a related Hiccup.
+- An overdue required Objective remains available to complete while the complication becomes part of the story. It still counts as required for progression.
+- After Chapter I, provide a brief chapter overview and show only 1–2 upcoming Objectives at a time. Objective completion or a relevant story event can reveal another Objective.
+
+The preview count is not yet a cap on all active Objectives. Timer start points, active Objective limits, optional carryover, repeat consequences, extensions, and impossible required Objectives remain open. Chapter transition presentation is also undecided.
+
+These rules do not automatically set the policy for every future Blueprint.
+
+---
+
 # Objective Timing
 
 Some Objectives may have time limits.
@@ -360,6 +382,8 @@ Not every Objective should create constant urgency.
 # Objective Failure
 
 Failure should not automatically mean the story stops.
+
+For Finding My Lane, missing a required Objective's deadline is not automatic failure or expiry: the Objective remains available and may introduce a Hiccup. The approved rules above take precedence over the general possibilities below.
 
 An Objective may fail because:
 
