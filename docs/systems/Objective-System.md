@@ -146,6 +146,54 @@ The meaning of these states should be defined consistently across Blueprints.
 
 ---
 
+# Life-Responsive Objectives and Player Focus
+
+Objectives should be generated as responses to what is actually happening in the Main Character's life. Chapters provide the theme; current circumstances, gameplay, relationships, previous choices, and unresolved responsibilities determine the relevant response objectives.
+
+An objective pool is a set of possibilities, not a fixed checklist delivered to every Sim. Do not invent a conflict merely to use an objective. Supportive relationships, achievements, and opportunities can also generate objectives.
+
+For Chapter IV — Standing on My Own, objectives respond to current pressures, consequences, and opportunities. For Chapter V — The Lane I Choose, objectives respond to where the Sim's life actually stands and help shape a fitting ending.
+
+## Chapter IV — Twelve Trigger Categories
+
+| Trigger | Possible response |
+|---|---|
+| Unresolved Hurdle | Address carried responsibilities while experiencing their consequences. |
+| Important relationship change | Respond to conflict, distance, a breakup, or growing closeness. |
+| Career or education change | Adjust to a promotion, job loss, academic trouble, or opportunity. |
+| Competing priorities | Decide how to handle two commitments that need attention. |
+| Growing personal interest | Develop a hobby or skill the Sim repeatedly pursues. |
+| Household change | Adapt to moving, new household members, or changed family responsibilities. |
+| Meaningful support received | Accept help, follow up, or strengthen that relationship. |
+| Consequences of a Crossroad | Follow through on or reconsider a previous decision. |
+| Financial change | Respond to an expense, reduced income, or newfound financial freedom. |
+| A personal milestone | Decide what comes next after a meaningful achievement. |
+| A boundary is tested | Respond when someone challenges a limit the Sim previously established. |
+| A new opportunity appears | Explore an invitation, connection, or possibility relevant to an existing interest. |
+
+These twelve categories make response objectives eligible; they are not twelve mandatory objectives. Automatic detection requires Sims 4 technical research.
+
+## Player-Selected Focus
+
+When several relevant situations exist at once, the Journal presents a short choice and the player selects what their Sim focuses on at that moment. The engine must not automatically choose the most urgent situation as the player's focus.
+
+The selected situation generates the next relevant response objective. Other situations may remain eligible while they still fit the Sim's circumstances. Choosing one focus does not automatically fail the other situations. Existing objective timers continue to follow their own rules.
+
+Example: job loss, a partner argument, and a friend's invitation occur around the same time. The player can choose to focus on their future, their relationship, or their social life.
+
+The intended loop is:
+Life event or ongoing situation → eligible response → player focus when needed → response objective → player action → changed circumstances.
+
+## Still to Define
+
+- How situations are detected and judged relevant.
+- How many focus choices appear and when the player may change focus.
+- Whether a player-selected response objective is required or optional.
+- Completion conditions and realistic timers for each response.
+- How older situations expire or adapt when circumstances change.
+
+---
+
 # Dynamic Objectives
 
 Blueprint Objectives should not always appear as one predetermined checklist.
