@@ -493,6 +493,18 @@ The player should be allowed to conclude that a person, hobby, place, or style i
 
 ---
 
+## Approved Finding My Lane progression
+
+Complete all required objectives for the current chapter path to make the next chapter ready. Each chapter has more required than optional objectives; optional objectives do not block progression. Time alone does not advance the chapter.
+
+Each objective uses a realistic individual Sim-day deadline. Progress during its allotted time does not trigger an objective-related Hiccup simply because it remains unfinished, and inactivity alone does not trigger one before its deadline. An unmet deadline can introduce a related Hiccup. An overdue required objective stays available and must still be completed.
+
+After Chapter I, present a brief chapter overview and reveal only 1–2 upcoming objectives at a time. Completion or a relevant story event can reveal another objective. Transition presentation, exact deadlines, and objective counts remain undecided.
+
+See the [approved progression rules in the Finding My Lane plan](Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules).
+
+---
+
 ## Chapter II — Choosing My Lane
 
 Chapter II focuses on **choice and emerging direction**.
