@@ -2,7 +2,7 @@
 
 ## Status
 
-Design in progress. The foundation, chapter roles, and progression rules below are approved design directions. Examples illustrate possibilities. Exact objective chains, deadline lengths, transition presentation, and ending conditions still need development and technical research.
+Design in progress. The foundation, chapter roles, and progression rules below are approved design directions. Examples illustrate possibilities. Exact objective chains, deadline lengths, chapter durations, and ending conditions still need development and technical research.
 
 ## Story foundation
 
@@ -26,9 +26,9 @@ Existing careers, relationships, and interests are relevant starting context. Di
 
 Each chapter has more required objectives than optional objectives. Exact counts and which objectives fill each role remain to be designed.
 
-All required objectives for the Main Character's chapter path must be completed before the next chapter can begin. This does not mean completing every possible objective in the Blueprint's pool. Optional objectives can develop relationships, opportunities, and Journal history, but unfinished optional objectives do not block a transition.
+The next chapter begins automatically when all required objectives for the Main Character's chapter path are completed, or when the current chapter's time limit expires—whichever happens first. This does not mean completing every possible objective in the Blueprint's pool. Optional objectives can develop relationships, opportunities, and Journal history, but unfinished optional objectives do not block a transition.
 
-Passing time alone does not advance the chapter.
+The chapter has its own time limit, separate from individual objective deadlines. Chapter-time expiry advances the story even if required objectives remain unfinished. Exact chapter durations are not yet decided.
 
 ### Individual objective deadlines
 
@@ -46,7 +46,7 @@ If the deadline passes and the objective is unfinished, a related Hiccup can ent
 
 A required objective stays available after its deadline passes. The player can finish it while the related Hiccup becomes part of the story.
 
-Missing a deadline does not automatically fail the chapter, skip the objective, or unlock the next chapter. Completing all required objectives remains the transition condition. A Hiccup is a slight problem that can grow or become a meaningful experience—even a good memory; a missed deadline does not automatically become a severe Hurdle.
+Missing a deadline does not automatically fail the chapter, skip the objective, or unlock the next chapter. Completing all required objectives advances the chapter early; the chapter's own time limit can also advance it. An overdue required objective stays available within the current chapter. Whether unfinished objectives carry over or change when the chapter ends remains undecided. A Hiccup is a slight problem that can grow or become a meaningful experience—even a good memory; a missed deadline does not automatically become a severe Hurdle.
 
 Repeated consequences, extensions, and impossible objectives still need separate rules.
 
@@ -58,9 +58,11 @@ Show only **1–2 upcoming objectives at a time**. Further objectives can be rev
 
 The preview count does not yet define a limit on all active objectives. How upcoming objectives become active, when their deadlines begin, and how overdue objectives remain visible need further design.
 
-### Transition presentation — undecided
+### Automatic chapter transition
 
-Completing the required objectives makes the next chapter ready. Whether it starts immediately or waits for a notification, Journal reflection, and player continuation has not been decided.
+The next chapter begins automatically on required-objective completion or chapter-time expiry, whichever happens first. A Journal reflection or player confirmation is not required to advance. Any chapter-change notification reports the transition rather than gating it.
+
+The transition uses the Sim's discoveries and story history gathered so far. How unfinished objectives affect the next chapter still needs design.
 
 ## Chapter I — Branching Out
 
@@ -145,7 +147,8 @@ Branch maps, ending names, and ending conditions are not finalized in this plan.
 ## Remaining design work
 
 - Specific required and optional objectives for each chapter path; required objectives must outnumber optional ones.
-- Transition presentation: immediate start or notification and Journal reflection.
+- Exact chapter time limits and when chapter timers start.
+- How unfinished required objectives and sparse discovery information affect a transition caused by chapter-time expiry.
 - Whether unfinished optional objectives carry into the next chapter.
 - Objective chains and how discoveries make them eligible.
 - How sparse or conflicting discovery information is handled.
