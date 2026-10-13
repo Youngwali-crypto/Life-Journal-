@@ -189,20 +189,32 @@ Finding My Lane has five confirmed chapters. Ending directions may include findi
 | IV | Standing on My Own | 14 Sim days |
 | V | The Lane I Choose | 14 Sim days |
 
-These are chapter time limits, not minimum waiting periods. Each chapter may end earlier when all of its chapter objectives are completed, in accordance with the chapter transition rule.
+These are chapter time limits, not minimum waiting periods. Each chapter may end earlier when all of its required objectives are completed, in accordance with the chapter transition rule.
 
 The five chapter limits total **62 Sim days** if every chapter runs to its limit. This does not define pause behavior or final ending conditions.
 
 ### Confirmed Chapter Transition Rule
 
-A chapter ends when **all of its chapter objectives are completed or its chapter timer expires**, whichever happens first. When another chapter exists, it begins from that outcome.
+A chapter ends when **all of its required objectives are completed or its chapter timer expires**, whichever happens first. When another chapter exists, it begins from that outcome.
 
 Completed and unfinished objective outcomes inform the next chapter's story. Chapter advancement does not require every objective to be completed when the chapter timer expires.
 
 Still to define:
-- Which objectives belong to the chapter completion set, including how optional objectives affect early completion.
-- How unfinished objectives are resolved or carried forward.
+- How unfinished required objectives are resolved or carried forward.
+- How relevance is evaluated for optional carryover and how carried objective timers behave.
 - Pause behavior and how individual objective timers relate to the chapter timer.
+
+---
+
+# Optional Objectives and Chapter Progression
+
+A chapter ends when all of its **required objectives** are completed or its chapter timer expires, whichever happens first. Optional objectives can be completed by choice but never hold up chapter advancement.
+
+At a chapter transition, an unfinished optional objective carries into the next chapter **only if it remains relevant to that chapter's story and the Main Character's current circumstances**. Objectives must not carry forward merely because they are unfinished.
+
+Optional objectives that no longer fit the next chapter are not carried forward. Not completing an optional objective is not, by itself, a failure or a reason for punishment.
+
+The exact relevance checks, handling of timers on carried objectives, and Journal wording for objectives that are not carried forward still require design.
 
 ---
 
@@ -425,6 +437,14 @@ A child or partner in the household experiences the consequences of the Main Cha
 The Blueprint may make an appropriate Household POV event eligible.
 
 The Household POV System will define the detailed behavior.
+
+---
+
+# Life Journal Blueprint Achievements
+
+Life Journal will have its own achievements associated with completing Story Blueprints. Blueprint completion achievements should be recorded in the Sim's Journal alongside the Blueprint outcome.
+
+Specific achievement names, additional achievement conditions, rewards, repeat awards, and whether achievement tracking is per Sim or across playthroughs still require design. Previously suggested achievement names are proposals, not confirmed definitions.
 
 ---
 
