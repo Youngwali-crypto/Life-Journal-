@@ -517,7 +517,7 @@ Completed and unfinished objective outcomes inform the next chapter's story. Cha
 Still to define:
 - Timers, completion handling, and exceptions for carried required objectives.
 - How relevance is evaluated for optional carryover and how carried objective timers behave.
-- Pause behavior and how individual objective timers relate to the chapter timer.
+- Resume behavior and any pause limits for lengthy objectives; chapter timers continue running.
 
 ---
 
@@ -760,10 +760,20 @@ Example: job loss, a partner argument, and a friend's invitation occur around th
 The intended loop is:
 Life event or ongoing situation → eligible response → player focus when needed → response objective → player action → changed circumstances.
 
+## Changing Focus and Lengthy Objective Timers
+
+The player may change focus before completing the selected response objective. Only lengthy objectives that require multiple Sim days to complete are eligible to have their individual timer paused when focus changes.
+
+A pause preserves the objective's progress and remaining time. Short objectives and objectives tied to a fixed event, date, or time-sensitive opportunity keep their deadlines; a multi-day deadline alone does not make a fixed deadline pausable.
+
+The chapter timer continues running. Pausing an eligible objective does not extend the chapter, erase its story circumstances, or remove the established carryover and Hurdle rules.
+
+Exact pause eligibility must be defined for each lengthy objective. Resume behavior and any pause limits still require design.
+
 ## Still to Define
 
 - How situations are detected and judged relevant.
-- How many focus choices appear and when the player may change focus.
+- How many focus choices appear and how the player changes focus.
 - Whether a player-selected response objective is required or optional.
 - Completion conditions and realistic timers for each response.
 - How older situations expire or adapt when circumstances change.
