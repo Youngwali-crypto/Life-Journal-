@@ -495,11 +495,11 @@ The player should be allowed to conclude that a person, hobby, place, or style i
 
 ## Approved Finding My Lane progression
 
-Complete all required objectives for the current chapter path to make the next chapter ready. Each chapter has more required than optional objectives; optional objectives do not block progression. Time alone does not advance the chapter.
+The next chapter begins automatically when all required objectives for the current chapter path are completed or the chapter's time limit expires, whichever happens first. Each chapter has more required than optional objectives; optional objectives do not block completion-based progression. No Journal reflection or player confirmation is required.
 
-Each objective uses a realistic individual Sim-day deadline. Progress during its allotted time does not trigger an objective-related Hiccup simply because it remains unfinished, and inactivity alone does not trigger one before its deadline. An unmet deadline can introduce a related Hiccup. An overdue required objective stays available and must still be completed.
+Each objective uses a realistic individual Sim-day deadline. Progress during its allotted time does not trigger an objective-related Hiccup simply because it remains unfinished, and inactivity alone does not trigger one before its deadline. An unmet deadline can introduce a related Hiccup. An overdue required objective stays available within the current chapter. It remains required for completion-based progression, but does not block advancement when the separate chapter timer expires. Its handling after that transition remains undecided.
 
-After Chapter I, present a brief chapter overview and reveal only 1–2 upcoming objectives at a time. Completion or a relevant story event can reveal another objective. Transition presentation, exact deadlines, and objective counts remain undecided.
+After Chapter I, present a brief chapter overview and reveal only 1–2 upcoming objectives at a time. Completion or a relevant story event can reveal another objective. Exact chapter durations, objective deadlines, objective counts, and handling of unfinished objectives at chapter-time expiry remain undecided.
 
 See the [approved progression rules in the Finding My Lane plan](Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules).
 
