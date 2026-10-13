@@ -315,7 +315,7 @@ Blueprints may contain both required and optional Objectives.
 
 ## Required Objectives
 
-These represent important story beats needed for Chapter progression.
+These represent important story beats. Completing all required objectives allows early Chapter progression; the chapter timer can also end the chapter with required objectives unfinished.
 
 ## Optional Objectives
 
@@ -330,6 +330,18 @@ Optional Objectives may still influence:
 - Journal history
 
 A player should not necessarily need to complete every Objective to experience a valid story.
+
+---
+
+# Optional Objectives and Chapter Progression
+
+A chapter ends when all of its **required objectives** are completed or its chapter timer expires, whichever happens first. Optional objectives can be completed by choice but never hold up chapter advancement.
+
+At a chapter transition, an unfinished optional objective carries into the next chapter **only if it remains relevant to that chapter's story and the Main Character's current circumstances**. Objectives must not carry forward merely because they are unfinished.
+
+Optional objectives that no longer fit the next chapter are not carried forward. Not completing an optional objective is not, by itself, a failure or a reason for punishment.
+
+The exact relevance checks, handling of timers on carried objectives, and Journal wording for objectives that are not carried forward still require design.
 
 ---
 
