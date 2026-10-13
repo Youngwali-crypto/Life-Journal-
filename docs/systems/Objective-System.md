@@ -134,7 +134,9 @@ Other outcomes may include:
 
 Active
 → Time limit expires
-→ Expired
+→ Expired (only where the Blueprint explicitly makes the opportunity unavailable)
+
+For Finding My Lane, an unfinished required Objective instead remains available with an overdue deadline. Overdue is timing information, not automatic failure or removal.
 
 or:
 
@@ -333,6 +335,26 @@ A player should not necessarily need to complete every Objective to experience a
 
 ---
 
+# Finding My Lane — Approved Progression and Reveal Rules
+
+The [Finding My Lane plan](../Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules) defines the approved rules for this Blueprint:
+
+- Each chapter has more required Objectives than optional Objectives; exact counts remain undecided.
+- The next chapter begins automatically when all required Objectives for the selected chapter path are completed or the chapter's own time limit expires, whichever happens first. Optional Objectives do not block completion-based progression.
+- The chapter timer is separate from individual Objective deadlines. No Journal reflection or player confirmation is required to advance.
+- Each Objective has an individual, realistic Sim-day deadline. Short actions may take one day; skills and relationship development need longer.
+- Progress within the allotted time does not trigger an objective-related Hiccup merely because the Objective remains unfinished.
+- Inactivity alone does not automatically trigger an objective-related Hiccup before its deadline.
+- An unmet deadline can introduce a related Hiccup.
+- An overdue required Objective remains available to complete while the complication becomes part of the story. It remains required for completion-based progression, but does not prevent advancement when the chapter timer expires. Its handling after that transition remains undecided.
+- After Chapter I, provide a brief chapter overview and show only 1–2 upcoming Objectives at a time. Objective completion or a relevant story event can reveal another Objective.
+
+The preview count is not yet a cap on all active Objectives. Timer start points, active Objective limits, optional carryover, repeat consequences, extensions, and impossible required Objectives remain open. Exact chapter durations and the handling of unfinished required Objectives at chapter-time expiry remain undecided.
+
+These rules do not automatically set the policy for every future Blueprint.
+
+---
+
 # Objective Timing
 
 Some Objectives may have time limits.
@@ -360,6 +382,8 @@ Not every Objective should create constant urgency.
 # Objective Failure
 
 Failure should not automatically mean the story stops.
+
+For Finding My Lane, missing a required Objective's deadline is not automatic failure or expiry: the Objective remains available and may introduce a Hiccup. The approved rules above take precedence over the general possibilities below.
 
 An Objective may fail because:
 
@@ -427,6 +451,8 @@ The Journal may contain more detailed information.
 Finding My Lane uses "Find Two Friends" as one of its early Objective concepts.
 
 Conceptually:
+
+This is a simplified technical prototype example. Its Chapter I placement tests the core loop; the full Blueprint's friendship objectives follow the chapter design described below.
 
 Objective ID:
 FML_CH1_FIND_TWO_FRIENDS
@@ -669,31 +695,57 @@ They should not reduce endings to a visible score.
 
 ---
 
-# Finding My Lane — Current Chapter I Objective Areas
+# Finding My Lane — Objective Areas by Chapter
 
-The current design contains eight major Objective areas:
+The current chapter structure follows the [Life Journal Overview](../Life-Journal-Overview.md).
 
-1. Find at least two friends
+## Chapter I — Branching Out
 
-2. Discover a favorite hobby and reach Level 4
+Chapter I focuses on discovery and exploration through the pattern:
 
-3. Find a career path
+**Explore → Experience → Reflect**
 
-4. Choose a Major if attending University
+The opening discovery objectives are:
 
-5. Invite a Sim out
+1. Find Your Favorite Music Genre
+2. Make 3 New Acquaintances
+3. Discover Your Favorite Social Venue
+4. Discover Your Hobbies
+5. Find Your Style
 
-6. Shop for new clothes or explore a new look
+Later Chapter I objectives build on these discoveries. Trying an activity, meeting someone, or exploring a style does not permanently commit the Sim to that choice.
 
-7. Declare My Circle
+The First Journal Entry may occur early and influence exploration without locking the Sim into a route.
 
-8. Complete the First Journal Entry
+## Chapter II — Choosing My Lane
 
-These are currently design concepts.
+Chapter II focuses on choice and emerging direction.
 
-They are not finalized as eight mandatory Objectives appearing in a fixed sequence.
+Objectives are dynamically generated from the Main Character's interactions, relationships, repeated behaviors, and emerging routes. They are not delivered as one fixed checklist.
 
-The Objective System may adapt their order, replace incompatible Objectives, or use them as parts of larger Objective chains.
+Possible objective areas include:
+
+- Develop acquaintances into meaningful friendships.
+- Deepen an emerging hobby, potentially toward Level 4.
+- Explore a career direction.
+- Explore a Major when attending University.
+- Invite a Sim out when relevant to an emerging relationship route.
+- Revisit personal style or lifestyle choices.
+- Decide who belongs in My Circle, including choosing nobody yet.
+
+These are possible objective areas, not mandatory tasks for every Sim. Chapter I discoveries inform them, but later behavior may change the story direction. Multiple routes may develop at the same time.
+
+## Chapter III — Outside Noise
+
+Chapter III brings stronger consequences to the choices and routes developed during Chapters I and II.
+
+Objectives should respond to relevant Hiccups, Hurdles, Crossroads, relationship developments, and competing priorities. They should follow the established story context rather than introduce unrelated drama.
+
+Later chapters have not yet been finalized.
+
+## Prototype Scope
+
+The technical prototype may use a simplified Chapter I friendship objective to prove progress detection and Journal recording. That test does not replace the full chapter design or make Chapter II's dynamic objectives a fixed Chapter I checklist.
 
 ---
 

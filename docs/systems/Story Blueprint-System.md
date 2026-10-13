@@ -152,13 +152,33 @@ Purpose:
 Explore different parts of life and begin discovering what the Main Character wants.
 
 Chapter II:
+Choosing My Lane
+
+Purpose:
+Develop choices and emerging direction through objectives generated from the Main Character's interactions, relationships, repeated behaviors, and emerging routes. Chapter I discoveries inform this chapter without permanently locking the Sim into a path.
+
+Chapter III:
 Outside Noise
 
 Purpose:
-Challenge those discoveries through relationships, pressure, opinions, and outside influence.
+Challenge the choices and routes developed during Chapters I and II through relationships, pressure, opinions, and outside influence. Use those established routes to generate relevant Hiccups, Hurdles, Crossroads, and stronger story consequences.
 
 Later Chapters:
 Not yet finalized.
+
+The [Life Journal Overview](../Life-Journal-Overview.md) contains the current Finding My Lane chapter design. This example summarizes that design; other Blueprints may use different chapter structures.
+
+---
+
+# Finding My Lane — Approved Chapter Gates
+
+For Finding My Lane, the next chapter begins automatically when all required Objectives for the current chapter path are completed or the chapter's time limit expires, whichever happens first. Required Objectives outnumber optional Objectives; optional Objectives do not block completion-based progression. A Journal reflection or player confirmation is not required.
+
+Each Objective has a realistic individual Sim-day deadline. An unmet deadline can introduce a related Hiccup, but an overdue required Objective remains available within the current chapter. It is still needed for completion-based progression, but does not block a transition triggered by the separate chapter timer. Handling unfinished Objectives after that transition remains undecided. Progress within the allotted time does not itself trigger an objective-related Hiccup, and inactivity alone does not trigger one before the deadline.
+
+After Chapter I, give a brief chapter overview and reveal only 1–2 upcoming Objectives at a time. Objective completion or a relevant story event can reveal the next Objective. The full chapter list stays hidden.
+
+See the [Finding My Lane plan](../Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules). Exact counts, objective deadlines, chapter durations, and unfinished-objective handling remain undecided. Other Blueprints may define different gates.
 
 ---
 
@@ -223,62 +243,37 @@ The Objective System handles objective tracking and completion.
 
 # Hiccups
 
-Blueprints may define Hiccups appropriate to their story themes.
+A Hiccup is a slight problem that can grow into a bigger issue or become a meaningful experience—even a good memory. How the Sim gets through it can strengthen their story.
 
-Hiccups represent smaller complications that may require attention.
+A Hiccup may lead to a larger problem, growth, a stronger relationship, or a positive experience the Sim can look back on. Resolving it should preserve what the experience contributed to the story rather than simply erase the problem.
 
-Example:
+Example: A plan falls apart, but spending the evening with a new acquaintance becomes the beginning of an important friendship.
 
-Finding My Lane
-→ University path active
-→ Main Character neglects coursework
-→ Falling Behind Hiccup becomes eligible
-
-Hiccups should respond to the Main Character's story rather than appear completely at random.
+Not every Hiccup becomes a Hurdle. Timing and escalation mechanics remain proposals.
 
 ---
 
 # Hurdles
 
-Blueprints may define larger complications called Hurdles.
+A Hurdle is a severe problem that puts the player at an ultimatum. The choice they make heavily affects the story they are creating and can reshape its direction.
 
-Hurdles may result from:
+A Hurdle threatens something important and asks the player what the Main Character is willing to protect, sacrifice, or change. Its defining feature is the severity of the problem and the weight of the decision, rather than how long it takes to resolve.
 
-- Repeated Hiccups
-- Major decisions
-- Relationship patterns
-- Story events
-- Chapter transitions
-- Repeated gameplay behavior
+Example: A partner demands that the Sim stop seeing someone in My Circle. Protecting the friendship, prioritizing the relationship, or rejecting the ultimatum can each significantly change the story.
 
-Hurdles should create meaningful story changes rather than functioning only as punishment.
+A Hurdle may have multiple responses without becoming a lower-stakes Crossroad. Outcomes should meaningfully reflect the player's choice.
 
 ---
 
 # Crossroads
 
-Blueprints may define interactive story decisions called Crossroads.
+A Crossroad is a less severe, multiple-choice decision that contributes to a shift in the story. It can open different opportunities and matter over time without carrying the immediate stakes of a Hurdle.
 
-Crossroads should present multiple reasonable options.
+Crossroads present multiple reasonable options. Their role is to contribute to direction and opportunity, while Hurdles place the player at a severe story-changing ultimatum. Multiple-choice presentation alone does not make a Hurdle a Crossroad.
 
-Example:
+Example: Choose whether to spend the evening with a new friend, explore a hobby, or attend a career event. Each option can develop a different part of the Sim's story.
 
-Same Night, Different Plans
-
-The Main Character has a networking opportunity.
-
-Their friends want to go clubbing.
-
-Possible choices:
-
-- Go with friends
-- Attend the networking event
-- Attempt both
-- Wait for friends
-
-The Blueprint may track the decision and use it to influence future events.
-
-Crossroads should generally avoid one hidden universally correct answer.
+See the [Hiccups, Hurdles, and Crossroads System](Hiccups-Hurdles-Crossroads-System.md) for the approved definitions and draft mechanics.
 
 ---
 

@@ -45,7 +45,10 @@ A personal-growth story about a Sim discovering who they are, what they enjoy, w
 The first planned chapters are:
 
 - Chapter I — Branching Out
-- Chapter II — Outside Noise
+- Chapter II — Choosing My Lane
+- Chapter III — Outside Noise
+
+The chapter structure and themes are documented in [Life Journal Overview](docs/Life-Journal-Overview.md).
 
 ## Project Status
 
