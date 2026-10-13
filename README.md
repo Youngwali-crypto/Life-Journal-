@@ -42,11 +42,13 @@ Two Sims playing the same Blueprint should be able to experience very different 
 
 A personal-growth story about a Sim discovering who they are, what they enjoy, who belongs in their life, and what direction they want their future to take.
 
-The first planned chapters are:
+Finding My Lane has five confirmed chapters:
 
 - Chapter I — Branching Out
 - Chapter II — Choosing My Lane
 - Chapter III — Outside Noise
+- Chapter IV — Standing on My Own
+- Chapter V — The Lane I Choose
 
 ### Confirmed Chapter Transition Rule
 
