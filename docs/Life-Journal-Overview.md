@@ -635,7 +635,25 @@ For example, a strong friendship route may create friendship conflicts or suppor
 
 Outside Noise should therefore feel like a continuation of the player's story rather than randomly generated drama.
 
-Later chapters have not yet been finalized.
+## Chapter IV — Standing on My Own
+
+Chapter IV focuses on **responding to pressure and making consequential choices**.
+
+The Main Character uses their experiences from Outside Noise to set boundaries, respond to outside influences, and decide what deserves a place in their life.
+
+The chapter should build on the player's actual routes, relationships, Crossroads, and unresolved complications rather than require one universally correct response.
+
+---
+
+## Chapter V — The Lane I Choose
+
+Chapter V focuses on **the results of the Main Character's choices and the Blueprint's conclusion**.
+
+The story brings together discoveries, relationships, objective outcomes, Crossroads, Hiccups, and Hurdles to reach one of several possible endings.
+
+A conclusion may involve finding direction, choosing a different path, or accepting that the Sim is still exploring. These are possible ending directions, not finalized ending definitions.
+
+Finding My Lane has five confirmed chapters. Specific objectives, durations, and ending conditions still require design.
 
 ---
 
