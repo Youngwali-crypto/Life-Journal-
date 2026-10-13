@@ -61,6 +61,14 @@ Whether actions can be detected automatically requires technical research. A pla
 
 ## Hiccups
 
+### Approved objective-deadline integration for Finding My Lane
+
+An unfinished objective can introduce a related Hiccup when its individual Sim-day deadline passes. Progress during the allotted time is valid; neither incomplete progress nor inactivity alone automatically triggers an objective-related Hiccup before the deadline. This supersedes the earlier one-day idleness proposal.
+
+An overdue required objective remains available to complete while the Hiccup becomes part of the story. Missing its deadline does not automatically fail the chapter or create a Hurdle. Hiccup response windows below are separate draft proposals, not the objective completion deadline.
+
+See the [Finding My Lane progression rules](../Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules).
+
 ### Proposed response rules
 
 Do not use one universal one-day response timer.
