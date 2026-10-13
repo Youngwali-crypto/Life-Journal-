@@ -2,7 +2,7 @@
 
 ## Status
 
-Design in progress. The foundation and Chapter I-to-II principle below are approved design directions. Examples illustrate possibilities; exact objectives, triggers, timing, transition gates, and ending conditions still need development and technical research.
+Design in progress. The foundation, chapter roles, and progression rules below are approved design directions. Examples illustrate possibilities. Exact objective chains, deadline lengths, transition presentation, and ending conditions still need development and technical research.
 
 ## Story foundation
 
@@ -19,6 +19,48 @@ Existing careers, relationships, and interests are relevant starting context. Di
 | I — Branching Out | Get to know the Sim through exploration and gameplay. |
 | II — Choosing My Lane | Use the information developed in Chapter I to generate more direct objectives, while continuing to respond to gameplay. |
 | III — Outside Noise | Bring pressure and consequences connected to the Sim's developing routes and choices. |
+
+## Approved chapter progression rules
+
+### Required and optional objectives
+
+Each chapter has more required objectives than optional objectives. Exact counts and which objectives fill each role remain to be designed.
+
+All required objectives for the Main Character's chapter path must be completed before the next chapter can begin. This does not mean completing every possible objective in the Blueprint's pool. Optional objectives can develop relationships, opportunities, and Journal history, but unfinished optional objectives do not block a transition.
+
+Passing time alone does not advance the chapter.
+
+### Individual objective deadlines
+
+Each objective has its own deadline measured in Sim days, matched to the work it realistically requires.
+
+- A short action, such as inviting a Sim out or visiting a venue, may fit within one Sim day.
+- A skill-level goal should allow several days of practice.
+- Developing a friendship should allow time for repeated interactions.
+
+These are timing principles, not finalized durations. Progress during the allotted time should not trigger a Hiccup merely because the objective is not yet complete. Inactivity alone does not automatically trigger an objective-related Hiccup before its deadline; this supersedes the earlier one-day idleness proposal.
+
+If the deadline passes and the objective is unfinished, a related Hiccup can enter the story. Making progress and completing the objective are separate: progress within the allotted time is valid, while an unmet deadline can still create a complication.
+
+### Overdue required objectives
+
+A required objective stays available after its deadline passes. The player can finish it while the related Hiccup becomes part of the story.
+
+Missing a deadline does not automatically fail the chapter, skip the objective, or unlock the next chapter. Completing all required objectives remains the transition condition. A Hiccup is a slight problem that can grow or become a meaningful experience—even a good memory; a missed deadline does not automatically become a severe Hurdle.
+
+Repeated consequences, extensions, and impossible objectives still need separate rules.
+
+### Gradual objective reveal after Chapter I
+
+At the start of each later chapter, give the player a brief overview of its focus without exposing its entire objective list or outcomes.
+
+Show only **1–2 upcoming objectives at a time**. Further objectives can be revealed by completing an objective or by a relevant story event. Their selection should continue responding to the Main Character's interactions, discoveries, and choices.
+
+The preview count does not yet define a limit on all active objectives. How upcoming objectives become active, when their deadlines begin, and how overdue objectives remain visible need further design.
+
+### Transition presentation — undecided
+
+Completing the required objectives makes the next chapter ready. Whether it starts immediately or waits for a notification, Journal reflection, and player continuation has not been decided.
 
 ## Chapter I — Branching Out
 
@@ -80,7 +122,7 @@ Approved direction: objectives are dynamically generated from interactions, rela
 
 Potential routes already described in the overview include friendship/My Circle, romance, hobby/passion, career, education, lifestyle, and personal growth.
 
-To develop next: route-specific objective chains, eligibility, alternatives, and transition conditions.
+To develop next: route-specific objective chains, eligibility, alternatives, and the required beats for the selected path. Use the approved progression and gradual reveal rules above.
 
 ## Chapter III — Outside Noise
 
@@ -102,11 +144,15 @@ Branch maps, ending names, and ending conditions are not finalized in this plan.
 
 ## Remaining design work
 
-- Exact completion and entry conditions for each chapter.
+- Specific required and optional objectives for each chapter path; required objectives must outnumber optional ones.
+- Transition presentation: immediate start or notification and Journal reflection.
+- Whether unfinished optional objectives carry into the next chapter.
 - Objective chains and how discoveries make them eligible.
 - How sparse or conflicting discovery information is handled.
 - Specific route branches and story complications.
-- Timing and response windows.
+- Exact objective deadlines, timer start points, and event response windows.
+- How active, upcoming, and overdue objectives are displayed.
+- What happens when a required objective becomes impossible, and whether overdue goals can receive extensions or repeated consequences.
 - Possible endings and their narrative conditions.
 
 ## Related documents
