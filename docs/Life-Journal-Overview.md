@@ -494,6 +494,20 @@ Possible themes include:
 
 ---
 
+### Finding My Lane — Confirmed Chapter Timing
+
+| Chapter | Name | Maximum duration |
+|---|---|---|
+| I | Branching Out | 10 Sim days |
+| II | Choosing My Lane | 12 Sim days |
+| III | Outside Noise | 12 Sim days |
+| IV | Standing on My Own | 14 Sim days |
+| V | The Lane I Choose | 14 Sim days |
+
+These are chapter time limits, not minimum waiting periods. Each chapter may end earlier when all of its chapter objectives are completed, in accordance with the chapter transition rule.
+
+The five chapter limits total **62 Sim days** if every chapter runs to its limit. This does not define pause behavior or final ending conditions.
+
 ### Confirmed Chapter Transition Rule
 
 A chapter ends when **all of its chapter objectives are completed or its chapter timer expires**, whichever happens first. When another chapter exists, it begins from that outcome.
@@ -501,7 +515,6 @@ A chapter ends when **all of its chapter objectives are completed or its chapter
 Completed and unfinished objective outcomes inform the next chapter's story. Chapter advancement does not require every objective to be completed when the chapter timer expires.
 
 Still to define:
-- The exact duration of each chapter in Sim days.
 - Which objectives belong to the chapter completion set, including how optional objectives affect early completion.
 - How unfinished objectives are resolved or carried forward.
 - Pause behavior and how individual objective timers relate to the chapter timer.
@@ -653,7 +666,7 @@ The story brings together discoveries, relationships, objective outcomes, Crossr
 
 A conclusion may involve finding direction, choosing a different path, or accepting that the Sim is still exploring. These are possible ending directions, not finalized ending definitions.
 
-Finding My Lane has five confirmed chapters. Specific objectives, durations, and ending conditions still require design.
+Finding My Lane has five confirmed chapters. Specific objectives and ending conditions still require design.
 
 ---
 
