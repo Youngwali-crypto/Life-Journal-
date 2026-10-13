@@ -333,6 +333,23 @@ A player should not necessarily need to complete every Objective to experience a
 
 ---
 
+# Required Objective Carryover and Entry Hurdles
+
+When a chapter timer expires with required objectives unfinished, the story advances. If a next chapter exists, those unfinished required objectives carry into it and trigger a Hurdle upon entry.
+
+The entry Hurdle must connect to the unfinished required work and its story context. Carryover preserves the unresolved responsibility while the Hurdle makes its consequences part of the new chapter.
+
+This differs from optional carryover: unfinished optional objectives carry forward only when relevant and do not trigger a Hurdle merely because they were left incomplete.
+
+Still to define:
+- Whether several unfinished required objectives produce one combined Hurdle or separate Hurdles.
+- How Hurdle severity reflects completion and meaningful progress.
+- Timers and completion handling for carried required objectives.
+- Handling when an objective becomes impossible or its circumstances change.
+- Resolution at the final chapter, where no next chapter exists.
+
+---
+
 # Optional Objectives and Chapter Progression
 
 A chapter ends when all of its **required objectives** are completed or its chapter timer expires, whichever happens first. Optional objectives can be completed by choice but never hold up chapter advancement.
