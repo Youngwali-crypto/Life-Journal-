@@ -358,6 +358,14 @@ These questions should be researched before choosing the final technical archite
 
 ---
 
+# Life Journal Blueprint Achievements
+
+Life Journal will have its own achievements associated with completing Story Blueprints. Blueprint completion achievements should be recorded in the Sim's Journal alongside the Blueprint outcome.
+
+Specific achievement names, additional achievement conditions, rewards, repeat awards, and whether achievement tracking is per Sim or across playthroughs still require design. Previously suggested achievement names are proposals, not confirmed definitions.
+
+---
+
 # Development Status
 
 Status: Design
