@@ -340,16 +340,16 @@ A player should not necessarily need to complete every Objective to experience a
 The [Finding My Lane plan](../Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules) defines the approved rules for this Blueprint:
 
 - Each chapter has more required Objectives than optional Objectives; exact counts remain undecided.
-- Complete all required Objectives for the selected chapter path to make the next chapter ready. Optional Objectives do not block the transition.
-- Time passing alone does not advance the chapter.
+- The next chapter begins automatically when all required Objectives for the selected chapter path are completed or the chapter's own time limit expires, whichever happens first. Optional Objectives do not block completion-based progression.
+- The chapter timer is separate from individual Objective deadlines. No Journal reflection or player confirmation is required to advance.
 - Each Objective has an individual, realistic Sim-day deadline. Short actions may take one day; skills and relationship development need longer.
 - Progress within the allotted time does not trigger an objective-related Hiccup merely because the Objective remains unfinished.
 - Inactivity alone does not automatically trigger an objective-related Hiccup before its deadline.
 - An unmet deadline can introduce a related Hiccup.
-- An overdue required Objective remains available to complete while the complication becomes part of the story. It still counts as required for progression.
+- An overdue required Objective remains available to complete while the complication becomes part of the story. It remains required for completion-based progression, but does not prevent advancement when the chapter timer expires. Its handling after that transition remains undecided.
 - After Chapter I, provide a brief chapter overview and show only 1–2 upcoming Objectives at a time. Objective completion or a relevant story event can reveal another Objective.
 
-The preview count is not yet a cap on all active Objectives. Timer start points, active Objective limits, optional carryover, repeat consequences, extensions, and impossible required Objectives remain open. Chapter transition presentation is also undecided.
+The preview count is not yet a cap on all active Objectives. Timer start points, active Objective limits, optional carryover, repeat consequences, extensions, and impossible required Objectives remain open. Exact chapter durations and the handling of unfinished required Objectives at chapter-time expiry remain undecided.
 
 These rules do not automatically set the policy for every future Blueprint.
 
