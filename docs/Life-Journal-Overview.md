@@ -494,6 +494,20 @@ Possible themes include:
 
 ---
 
+### Confirmed Chapter Transition Rule
+
+A chapter ends when **all of its chapter objectives are completed or its chapter timer expires**, whichever happens first. When another chapter exists, it begins from that outcome.
+
+Completed and unfinished objective outcomes inform the next chapter's story. Chapter advancement does not require every objective to be completed when the chapter timer expires.
+
+Still to define:
+- The exact duration of each chapter in Sim days.
+- Which objectives belong to the chapter completion set, including how optional objectives affect early completion.
+- How unfinished objectives are resolved or carried forward.
+- Pause behavior and how individual objective timers relate to the chapter timer.
+
+---
+
 ## Chapter I — Branching Out
 
 Chapter I focuses on **discovery and exploration**.
