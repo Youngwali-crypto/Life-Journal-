@@ -172,13 +172,13 @@ The [Life Journal Overview](../Life-Journal-Overview.md) contains the current Fi
 
 # Finding My Lane — Approved Chapter Gates
 
-For Finding My Lane, complete all required Objectives for the current chapter path to make the next chapter ready. Required Objectives outnumber optional Objectives, and optional Objectives do not block progression. Time alone does not advance the chapter.
+For Finding My Lane, the next chapter begins automatically when all required Objectives for the current chapter path are completed or the chapter's time limit expires, whichever happens first. Required Objectives outnumber optional Objectives; optional Objectives do not block completion-based progression. A Journal reflection or player confirmation is not required.
 
-Each Objective has a realistic individual Sim-day deadline. An unmet deadline can introduce a related Hiccup, but an overdue required Objective remains available and is still needed for progression. Progress within the allotted time does not itself trigger an objective-related Hiccup, and inactivity alone does not trigger one before the deadline.
+Each Objective has a realistic individual Sim-day deadline. An unmet deadline can introduce a related Hiccup, but an overdue required Objective remains available within the current chapter. It is still needed for completion-based progression, but does not block a transition triggered by the separate chapter timer. Handling unfinished Objectives after that transition remains undecided. Progress within the allotted time does not itself trigger an objective-related Hiccup, and inactivity alone does not trigger one before the deadline.
 
 After Chapter I, give a brief chapter overview and reveal only 1–2 upcoming Objectives at a time. Objective completion or a relevant story event can reveal the next Objective. The full chapter list stays hidden.
 
-See the [Finding My Lane plan](../Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules). Exact counts, durations, and transition presentation remain undecided. Other Blueprints may define different gates.
+See the [Finding My Lane plan](../Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules). Exact counts, objective deadlines, chapter durations, and unfinished-objective handling remain undecided. Other Blueprints may define different gates.
 
 ---
 
