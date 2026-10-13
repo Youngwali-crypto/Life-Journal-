@@ -170,6 +170,18 @@ The [Life Journal Overview](../Life-Journal-Overview.md) contains the current Fi
 
 ---
 
+# Finding My Lane — Approved Chapter Gates
+
+For Finding My Lane, complete all required Objectives for the current chapter path to make the next chapter ready. Required Objectives outnumber optional Objectives, and optional Objectives do not block progression. Time alone does not advance the chapter.
+
+Each Objective has a realistic individual Sim-day deadline. An unmet deadline can introduce a related Hiccup, but an overdue required Objective remains available and is still needed for progression. Progress within the allotted time does not itself trigger an objective-related Hiccup, and inactivity alone does not trigger one before the deadline.
+
+After Chapter I, give a brief chapter overview and reveal only 1–2 upcoming Objectives at a time. Objective completion or a relevant story event can reveal the next Objective. The full chapter list stays hidden.
+
+See the [Finding My Lane plan](../Finding-My-Lane-Blueprint.md#approved-chapter-progression-rules). Exact counts, durations, and transition presentation remain undecided. Other Blueprints may define different gates.
+
+---
+
 # Dynamic Story Progression
 
 Blueprints should not always progress through one fixed sequence.
