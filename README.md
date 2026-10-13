@@ -60,20 +60,22 @@ Finding My Lane has five confirmed chapters:
 | IV | Standing on My Own | 14 Sim days |
 | V | The Lane I Choose | 14 Sim days |
 
-These are chapter time limits, not minimum waiting periods. Each chapter may end earlier when all of its chapter objectives are completed, in accordance with the chapter transition rule.
+These are chapter time limits, not minimum waiting periods. Each chapter may end earlier when all of its required objectives are completed, in accordance with the chapter transition rule.
 
 The five chapter limits total **62 Sim days** if every chapter runs to its limit. This does not define pause behavior or final ending conditions.
 
 ### Confirmed Chapter Transition Rule
 
-A chapter ends when **all of its chapter objectives are completed or its chapter timer expires**, whichever happens first. When another chapter exists, it begins from that outcome.
+A chapter ends when **all of its required objectives are completed or its chapter timer expires**, whichever happens first. When another chapter exists, it begins from that outcome.
 
 Completed and unfinished objective outcomes inform the next chapter's story. Chapter advancement does not require every objective to be completed when the chapter timer expires.
 
 Still to define:
-- Which objectives belong to the chapter completion set, including how optional objectives affect early completion.
-- How unfinished objectives are resolved or carried forward.
+- How unfinished required objectives are resolved or carried forward.
+- How relevance is evaluated for optional carryover and how carried objective timers behave.
 - Pause behavior and how individual objective timers relate to the chapter timer.
+
+Optional objectives do not block progression. Unfinished optional objectives carry forward only when relevant to the next chapter. Life Journal will also record its own Blueprint completion achievements in the Sim's Journal.
 
 ## Project Status
 
