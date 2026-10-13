@@ -163,8 +163,19 @@ Outside Noise
 Purpose:
 Challenge the routes developed in Chapters I and II through pressure, competing priorities, Hiccups, Hurdles, and Crossroads.
 
-Later Chapters:
-Not yet finalized.
+Chapter IV:
+Standing on My Own
+
+Purpose:
+Respond to outside pressure, set boundaries, and make consequential choices informed by earlier chapters.
+
+Chapter V:
+The Lane I Choose
+
+Purpose:
+Bring together the consequences of the Main Character's choices and reach one of several possible endings.
+
+Finding My Lane has five confirmed chapters. Ending directions may include finding direction, choosing a different path, or accepting continued exploration. Specific objectives, chapter durations, and ending conditions still require design.
 
 ---
 
