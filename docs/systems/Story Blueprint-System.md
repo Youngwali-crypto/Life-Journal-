@@ -200,9 +200,26 @@ A chapter ends when **all of its required objectives are completed or its chapte
 Completed and unfinished objective outcomes inform the next chapter's story. Chapter advancement does not require every objective to be completed when the chapter timer expires.
 
 Still to define:
-- How unfinished required objectives are resolved or carried forward.
+- Timers, completion handling, and exceptions for carried required objectives.
 - How relevance is evaluated for optional carryover and how carried objective timers behave.
 - Pause behavior and how individual objective timers relate to the chapter timer.
+
+---
+
+# Required Objective Carryover and Entry Hurdles
+
+When a chapter timer expires with required objectives unfinished, the story advances. If a next chapter exists, those unfinished required objectives carry into it and trigger a Hurdle upon entry.
+
+The entry Hurdle must connect to the unfinished required work and its story context. Carryover preserves the unresolved responsibility while the Hurdle makes its consequences part of the new chapter.
+
+This differs from optional carryover: unfinished optional objectives carry forward only when relevant and do not trigger a Hurdle merely because they were left incomplete.
+
+Still to define:
+- Whether several unfinished required objectives produce one combined Hurdle or separate Hurdles.
+- How Hurdle severity reflects completion and meaningful progress.
+- Timers and completion handling for carried required objectives.
+- Handling when an objective becomes impossible or its circumstances change.
+- Resolution at the final chapter, where no next chapter exists.
 
 ---
 
