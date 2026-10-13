@@ -216,6 +216,20 @@ This differs from optional carryover: unfinished optional objectives carry forwa
 
 Multiple unfinished required objectives produce **one combined chapter-entry Hurdle**, not a separate entry Hurdle for every objective. Its severity scales with how much required work remains unfinished. Meaningful progress must be recognized rather than treating a partially completed objective as entirely untouched.
 
+### Hurdles as Continuing Story Consequences
+
+An entry Hurdle adds to the developing story rather than acting as a checklist penalty that disappears when the carried objectives are completed. Completing those objectives does not automatically resolve or erase the Hurdle; its consequences remain part of the story and Journal history.
+
+If carried required objectives remain unfinished through the next chapter, a **bigger combined Hurdle** occurs upon entry to the following chapter. Repeatedly leaving required work unfinished therefore escalates its story consequences across chapter transitions.
+
+The escalation remains connected to the unresolved work and current story context. Meaningful progress must still be recognized when determining severity.
+
+Example:
+- Chapter I ends with required work unfinished.
+- Chapter II begins with that work carried forward and one combined entry Hurdle.
+- If the carried work is still unfinished when Chapter II ends, Chapter III begins with a bigger related Hurdle.
+- Completing the carried work contributes to the story without automatically erasing earlier consequences.
+
 Still to define:
 - The exact severity thresholds and how meaningful progress is measured.
 - Timers and completion handling for carried required objectives.
