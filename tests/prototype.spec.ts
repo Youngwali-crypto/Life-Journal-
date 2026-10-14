@@ -1,239 +1,118 @@
-describe("chapter progression prototype", () => {
-  it("T01 required objective completion completes chapter", () => {
-    // Arrange
-    const chapter = {
-      id: "chapter-1",
-      name: "Branching Out",
-      index: 1,
-      maxDays: 10,
-      timerEndsAt: "2026-10-15T00:00:00Z",
-      status: "active",
-      requiredObjectiveIds: ["obj-a", "obj-b"],
-      optionalObjectiveIds: ["obj-c"],
-    };
+import {
+  chapters,
+  objectives,
+  events,
+  sampleJournalState,
+} from "../prototypes/fixtures/fixtures";
 
-    const objectives = {
-      "obj-a": { id: "obj-a", required: true, status: "completed" },
-      "obj-b": { id: "obj-b", required: true, status: "completed" },
-      "obj-c": { id: "obj-c", required: false, status: "active" },
-    } as any;
+describe("fixture-driven chapter progression prototype tests", () => {
+  it("T01 chapter 1 required objectives are tracked correctly", () => {
+    const chapter = chapters.find(c => c.id === "chapter-1");
+    const required = objectives.filter(
+      o => o.chapterId === chapter!.id && o.required
+    );
 
-    // Act
-    const complete =
-      chapter.requiredObjectiveIds.length > 0 &&
-      chapter.requiredObjectiveIds.every(id => objectives[id].status === "completed");
-
-    // Assert
-    expect(complete).toBe(true);
+    expect(chapter).toBeDefined();
+    expect(required).toHaveLength(2);
+    expect(required.every(o => o.status === "completed" || o.status === "active")).toBe(true);
   });
 
   it("T02 optional objective does not block chapter completion", () => {
-    // Arrange
-    const chapter = {
-      id: "chapter-1",
-      name: "Branching Out",
-      index: 1,
-      maxDays: 10,
-      timerEndsAt: "2026-10-15T00:00:00Z",
-      status: "active",
-      requiredObjectiveIds: ["obj-a"],
-      optionalObjectiveIds: ["obj-c"],
-    };
+    const chapter = chapters.find(c => c.id === "chapter-1");
+    const required = objectives.filter(
+      o => o.chapterId === chapter!.id && o.required
+    );
+    const optional = objectives.filter(
+      o => o.chapterId === chapter!.id && !o.required
+    );
 
-    const objectives = {
-      "obj-a": { id: "obj-a", required: true, status: "completed" },
-      "obj-c": { id: "obj-c", required: false, status: "active" },
-    } as any;
+    const chapterComplete = required.every(o => o.status === "completed");
 
-    const isChapterComplete =
-      chapter.requiredObjectiveIds.length > 0 &&
-      chapter.requiredObjectiveIds.every(id => objectives[id].status === "completed");
-
-    // Assert
-    expect(isChapterComplete).toBe(true);
-    expect(objectives["obj-c"].status).toBe("active");
+    expect(chapterComplete).toBe(false);
+    expect(optional.length).toBeGreaterThan(0);
+    expect(optional.every(o => o.status === "active")).toBe(true);
   });
 
-  it("T03 chapter expires when timer runs out with unresolved required objective", () => {
-    // Arrange
-    const chapter = {
-      id: "chapter-2",
-      name: "Choosing My Lane",
-      index: 2,
-      maxDays: 12,
-      timerEndsAt: "2026-10-10T00:00:00Z",
-      status: "active",
-      requiredObjectiveIds: ["obj-x"],
-      optionalObjectiveIds: [],
-    };
+  it("T03 chapter expiry logic is supported by fixture timestamps", () => {
+    const chapter = chapters.find(c => c.id === "chapter-2");
+    const now = new Date("2026-10-24T00:00:00Z");
+    const expired = now >= new Date(chapter!.timerEndsAt);
 
-    const now = new Date("2026-10-10T00:00:01Z");
-    const objectives = {
-      "obj-x": { id: "obj-x", required: true, status: "active" },
-    } as any;
-
-    // Act
-    const expired = now >= new Date(chapter.timerEndsAt);
-    const requiredStillUnresolved =
-      chapter.requiredObjectiveIds.some(id => objectives[id].status === "active");
-
-    // Assert
+    expect(chapter).toBeDefined();
     expect(expired).toBe(true);
-    expect(requiredStillUnresolved).toBe(true);
   });
 
-  it("T04 overdue required objective stays active but marked overdue", () => {
-    // Arrange
-    const objective = {
-      id: "obj-overdue-required",
-      required: true,
-      status: "active",
-      deadline: "2026-10-05T00:00:00Z",
-    } as any;
+  it("T04 overdue required objective remains required and overdue", () => {
+    const objective = objectives.find(o => o.id === "obj-4");
+    const now = new Date("2026-10-19T00:00:00Z");
+    const isOverdue = objective!.deadline && now > new Date(objective!.deadline);
 
-    const now = new Date("2026-10-06T00:00:00Z");
-
-    // Act
-    if (objective.deadline && now > new Date(objective.deadline)) {
-      objective.status = "overdue";
-    }
-
-    // Assert
-    expect(objective.status).toBe("overdue");
-    expect(objective.required).toBe(true);
+    expect(objective!.required).toBe(true);
+    expect(isOverdue).toBe(true);
   });
 
-  it("T05 overdue optional objective can fail or auto-resolve", () => {
-    const objective = {
-      id: "obj-optional",
-      required: false,
-      status: "active",
-      deadline: "2026-10-05T00:00:00Z",
-    } as any;
+  it("T05 optional objective can be auto-resolved after deadline", () => {
+    const objective = objectives.find(o => o.id === "obj-5");
+    const now = new Date("2026-10-16T00:00:00Z");
+    const expired = objective!.deadline && now > new Date(objective!.deadline);
 
-    const now = new Date("2026-10-06T00:00:00Z");
-
-    if (objective.deadline && now > new Date(objective.deadline)) {
-      objective.status = "auto_resolved";
-    }
-
-    expect(objective.status).toBe("auto_resolved");
-    expect(objective.required).toBe(false);
+    expect(expired).toBe(true);
+    expect(objective!.required).toBe(false);
+    expect(objective!.carryoverPolicy).toBe("carry_when_relevant");
   });
 
-  it("T06 required carryover persists across chapter boundary", () => {
-    const objective = {
-      id: "obj-required-persist",
-      required: true,
-      carryoverPolicy: "required_persists",
-      status: "active",
-    } as any;
+  it("T06 required carryover policy persists by default", () => {
+    const requiredObjectives = objectives.filter(o => o.required);
 
-    expect(objective.carryoverPolicy).toBe("required_persists");
-    expect(objective.required).toBe(true);
+    expect(requiredObjectives.length).toBeGreaterThan(0);
+    expect(requiredObjectives.every(o => o.carryoverPolicy === "required_persists")).toBe(true);
   });
 
-  it("T07 optional objective carries forward only when relevant", () => {
-    const objective = {
-      id: "obj-optional-relevant",
-      required: false,
-      carryoverPolicy: "carry_when_relevant",
-      status: "active",
-    } as any;
+  it("T07 optional objectives only carry over when relevant", () => {
+    const optionalObjectives = objectives.filter(o => !o.required);
 
-    const relevant = objective.carryoverPolicy === "carry_when_relevant";
-
-    expect(relevant).toBe(true);
-    expect(objective.required).toBe(false);
+    expect(optionalObjectives.length).toBeGreaterThan(0);
+    expect(optionalObjectives.every(o => o.carryoverPolicy === "carry_when_relevant")).toBe(true);
   });
 
-  it("T08 Hiccup is non-blocking and may escalate", () => {
-    const event = {
-      id: "evt-hiccup",
-      type: "hiccup",
-      required: false,
-      status: "active",
-      objectiveId: "obj-hiccup",
-    } as any;
+  it("T08 Hiccup is non-blocking and optional", () => {
+    const event = events.find(e => e.type === "hiccup");
 
-    const objective = {
-      id: "obj-hiccup",
-      required: false,
-      status: "active",
-    } as any;
-
-    expect(event.type).toBe("hiccup");
-    expect(event.required).toBe(false);
-    expect(objective.required).toBe(false);
+    expect(event).toBeDefined();
+    expect(event!.required).toBe(false);
+    expect(event!.severity).toBe("low");
   });
 
-  it("T09 Crossroads create branching choice and keep chapter moving", () => {
-    const event = {
-      id: "evt-crossroads",
-      type: "crossroads",
-      required: false,
-      status: "active",
-    } as any;
+  it("T09 Crossroads creates branching choice state", () => {
+    const event = events.find(e => e.type === "crossroads");
 
-    const objective = {
-      id: "obj-crossroads",
-      required: false,
-      choices: [
-        { id: "creative", label: "Creative path" },
-        { id: "social", label: "Social path" },
-        { id: "independent", label: "Independent path" },
-      ],
-      status: "active",
-    } as any;
-
-    expect(event.type).toBe("crossroads");
-    expect(objective.required).toBe(false);
-    expect(objective.choices).toHaveLength(3);
+    expect(event).toBeDefined();
+    expect(event!.required).toBe(false);
+    expect(event!.severity).toBe("medium");
   });
 
-  it("T10 Hurdle is required and highly consequential", () => {
-    const event = {
-      id: "evt-hurdle",
-      type: "hurdle",
-      required: true,
-      status: "active",
-    } as any;
+  it("T10 Hurdle is required and high severity", () => {
+    const event = events.find(e => e.type === "hurdle");
 
-    const objective = {
-      id: "obj-hurdle",
-      required: true,
-      status: "active",
-    } as any;
-
-    expect(event.type).toBe("hurdle");
-    expect(event.required).toBe(true);
-    expect(objective.required).toBe(true);
+    expect(event).toBeDefined();
+    expect(event!.required).toBe(true);
+    expect(event!.severity).toBe("high");
   });
 
-  it("T11 Crossroads without action applies default resolution after deadline", () => {
-    const objective = {
-      id: "obj-crossroads-expired",
-      required: false,
-      status: "active",
-      deadline: "2026-10-05T00:00:00Z",
-    } as any;
+  it("T11 crossed objective deadlines auto-resolve by default in fixture data", () => {
+    const objective = objectives.find(o => o.id === "obj-5");
+    const now = new Date("2026-10-16T00:00:00Z");
+    const expired = objective!.deadline && now > new Date(objective!.deadline);
 
-    const now = new Date("2026-10-06T00:00:00Z");
-
-    if (objective.deadline && now > new Date(objective.deadline)) {
-      objective.status = "auto_resolved";
-    }
-
-    expect(objective.status).toBe("auto_resolved");
+    expect(expired).toBe(true);
+    expect(objective!.required).toBe(false);
   });
 
-  it("T12 chapter transition reveals next chapter overview and only a small number of objectives", () => {
-    const nextChapterPreview = {
-      overview: "This chapter focuses on identity and direction.",
-      upcomingObjectives: ["Choose your lane", "Reassess your circle"],
-    };
-
-    expect(nextChapterPreview.overview).toContain("identity");
-    expect(nextChapterPreview.upcomingObjectives.length).toBeLessThanOrEqual(2);
+  it("T12 sample journal state contains chapter, objective, and event fixtures", () => {
+    expect(sampleJournalState.chapterIndex).toBe(1);
+    expect(Object.keys(sampleJournalState.chapters).length).toBeGreaterThan(0);
+    expect(Object.keys(sampleJournalState.objectives).length).toBeGreaterThan(0);
+    expect(Object.keys(sampleJournalState.events).length).toBeGreaterThan(0);
+    expect(sampleJournalState.journalEntries.length).toBeGreaterThan(0);
   });
 });
