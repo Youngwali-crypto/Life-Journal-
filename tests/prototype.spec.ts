@@ -4,8 +4,16 @@ import {
   activateLifeJournalMod,
   configureLifeJournalSettings,
   canActivateLifeJournalMod,
-  type JournalOrder,
 } from "../prototypes/journal-delivery-flow";
+import {
+  createJournalApiState,
+  createOrderApi,
+  confirmDeliveryApi,
+  activateJournalModApi,
+  configureJournalSettingsApi,
+  getOrderApi,
+  updateTrackingApi,
+} from "../prototypes/journal-api";
 
 describe("beta receive journal flow", () => {
   it("T13 createJournalOrder starts in created state and keeps the mod locked", () => {
@@ -52,6 +60,43 @@ describe("beta receive journal flow", () => {
         privacyMode: "private",
       }).settings
     ).toEqual({
+      reminderFrequency: "weekly",
+      promptsEnabled: true,
+      privacyMode: "private",
+    });
+  });
+
+  it("T16 journal API creates and tracks orders through the delivery gate", () => {
+    const state = createJournalApiState();
+    const order = createOrderApi(state, {
+      simId: "sim-42",
+      householdId: "household-7",
+      shippingAddress: "123 Willow Lane",
+      trackingId: "TRK-9001",
+    });
+
+    expect(order.status).toBe("created");
+    expect(getOrderApi(state, order.id)).toBeDefined();
+
+    const shipped = updateTrackingApi(state, {
+      trackingId: "TRK-9001",
+      status: "shipped",
+    });
+    expect(shipped?.status).toBe("shipped");
+
+    const delivered = confirmDeliveryApi(state, order.id);
+    expect(delivered.status).toBe("delivered");
+
+    const activated = activateJournalModApi(state, order.id);
+    expect(activated.modActivated).toBe(true);
+
+    const configured = configureJournalSettingsApi(state, order.id, {
+      reminderFrequency: "weekly",
+      promptsEnabled: true,
+      privacyMode: "private",
+    });
+
+    expect(configured.settings).toEqual({
       reminderFrequency: "weekly",
       promptsEnabled: true,
       privacyMode: "private",
