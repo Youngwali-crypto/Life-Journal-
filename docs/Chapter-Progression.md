@@ -21,6 +21,7 @@ This document is intended to be the design reference for the first playable prot
 5. Objective deadlines are individual and should not be treated as a single global timer for the chapter.
 6. Story events and objective failures can produce Hiccups, Crossroads, or Hurdles depending on severity and impact.
 7. After Chapter I, only a brief overview and a small number of near-term objectives should be visible at once.
+8. Each chapter path should have more required objectives than optional objectives.
 
 ---
 
@@ -34,7 +35,7 @@ Finding My Lane uses five confirmed chapters:
 - Chapter IV — Standing on My Own
 - Chapter V — The Lane I Choose
 
-### Suggested timing
+### Confirmed timing
 | Chapter | Name | Max duration |
 |---|---|---|
 | I | Branching Out | 10 Sim days |
@@ -63,8 +64,8 @@ Optional objectives should not block chapter completion. They may remain active,
 When the chapter timer expires:
 - the chapter ends automatically
 - required objectives that remain incomplete are not immediately discarded
-- unfinished required objectives remain available within the active chapter context for review/history
-- the next chapter begins unless the design explicitly states otherwise
+- unfinished required objectives are preserved in the outgoing chapter history and carry into the next chapter when one exists
+- the next chapter starts automatically, and its timer starts at the handoff
 
 This default behavior matches the current project direction:
 - overdue required objectives remain part of the current chapter’s story state
@@ -164,9 +165,10 @@ Required objectives should remain active until either:
 - the chapter ends by timer expiry
 
 If the chapter expires while a required objective remains incomplete:
-- the objective remains part of the active chapter history
-- the completion logic for that chapter still counts it as unmet
-- the next chapter may begin while preserving the unresolved state in narrative memory
+- the outgoing chapter records the objective as unmet
+- if a next chapter exists, the objective carries into it and contributes to one combined entry Hurdle tied to the unfinished required work
+- the entry Hurdle accounts for meaningful progress. If carried required work is still unfinished at the next chapter boundary, the following chapter opens with a bigger related Hurdle
+- completing carried work does not automatically erase an existing Hurdle or its story consequences
 
 ### 6.3 Relevant story event carryover
 If a story event is directly relevant to the next chapter, the system should carry forward:
@@ -186,14 +188,16 @@ A chapter transition occurs when:
 - all required objectives are complete, or
 - the chapter timer expires
 
+The handoff is automatic. It requires no Journal reflection or player confirmation. The incoming chapter's time limit starts at the handoff.
+
 If a chapter ends due to objective completion:
 - the next chapter begins immediately
 - the next chapter reveals a brief overview and a limited number of upcoming objectives
-- old chapter objectives are archived as story history
+- old chapter outcomes are recorded in story history, and eligible unfinished optional objectives may carry forward
 
 If a chapter ends due to timer expiry:
 - the chapter is marked as expired
-- unfinished required objectives are archived as relevant unresolved state
+- unfinished required objectives carry forward and produce one combined entry Hurdle if another chapter exists
 - the next chapter begins with a brief summary of what happened
 
 ### 7.2 Chapter preview behavior
@@ -262,7 +266,10 @@ These are the remaining design decisions to resolve before implementation:
 - Should Crossroads ever be required?
 - Should expired Crossroads resolve with a neutral default or a predetermined choice?
 - Should chapter timers continue while the player is not active in the household?
-- Should overdue required objectives remain visible in the chapter after timer expiry, or be archived immediately?
+- How should carried objective timers work, and how should optional relevance be evaluated?
+- How should meaningful progress affect entry Hurdle severity?
+- How should impossible objectives and unfinished work at the final chapter be handled?
+- How should the inactivity Hiccup threshold of more than one Sim day interact with an objective's own deadline? Meaningful progress should protect the Sim from an inactivity Hiccup.
 
 These decisions should be made as part of Phase A sign-off before technical implementation begins.
 
