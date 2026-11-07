@@ -68,10 +68,10 @@ The five chapter limits total **62 Sim days** if every chapter runs to its limit
 
 A chapter ends when **all of its required objectives are completed or its chapter timer expires**, whichever happens first. When another chapter exists, it begins from that outcome.
 
-Completed and unfinished objective outcomes inform the next chapter's story. Chapter advancement does not require every objective to be completed when the chapter timer expires.
+Completed and unfinished objective outcomes inform the next chapter's story. When the timer expires, unfinished required objectives carry into the next chapter if one exists and produce one combined entry Hurdle. Chapter advancement does not require every objective to be completed when the chapter timer expires.
 
 Still to define:
-- How unfinished required objectives are resolved or carried forward.
+- How timers and completion work for carried objectives, how Hurdle severity scales, and how unfinished work is handled at the final chapter.
 - How relevance is evaluated for optional carryover and how carried objective timers behave.
 - Pause behavior and how individual objective timers relate to the chapter timer.
 
@@ -86,6 +86,8 @@ The project is being redesigned specifically for The Sims 4 after originally bei
 Gameplay systems will be documented and researched before full implementation begins.
 
 ## Development Approach
+
+Use Python for new gameplay scripts and their tests. The existing TypeScript prototype is a reference for chapter rules.
 
 Features should progress through:
 
