@@ -1,10 +1,10 @@
 """Persistent Main Character selection and story tracking outside the game."""
 import json
-import sqlite3
-from contextlib import closing
 from dataclasses import dataclass
 from typing import Optional, Tuple
 from uuid import uuid4
+
+from .database_session import database_session
 
 
 @dataclass(frozen=True)
@@ -21,9 +21,10 @@ class StoryState:
 
 
 class StoryTracker:
-    def __init__(self, path):
+    def __init__(self, path, *, connection=None):
         self.path = str(path)
-        with closing(sqlite3.connect(self.path)) as connection, connection:
+        self.connection = connection
+        with database_session(self.path, self.connection) as connection:
             connection.execute("""
                 CREATE TABLE IF NOT EXISTS stories (
                     id TEXT PRIMARY KEY, save_id TEXT NOT NULL,
@@ -48,13 +49,13 @@ class StoryTracker:
         return StoryState(*row[:7], tuple(json.loads(row[7])), row[8])
 
     def get(self, story_id):
-        with closing(sqlite3.connect(self.path)) as connection:
+        with database_session(self.path, self.connection) as connection:
             return self._state(connection.execute(
                 "SELECT * FROM stories WHERE id = ?", (story_id,),
             ).fetchone())
 
     def active(self, save_id, household_id):
-        with closing(sqlite3.connect(self.path)) as connection:
+        with database_session(self.path, self.connection) as connection:
             return self._state(connection.execute(
                 "SELECT * FROM stories WHERE save_id = ? AND household_id = ? AND status = 'active'",
                 (save_id, household_id),
@@ -65,7 +66,7 @@ class StoryTracker:
         if not all((save_id, household_id, sim_id)):
             raise ValueError("Save, household, and Sim identifiers are required")
         story_id = uuid4().hex
-        with closing(sqlite3.connect(self.path)) as connection, connection:
+        with database_session(self.path, self.connection) as connection:
             connection.execute(
                 "INSERT INTO stories VALUES (?, ?, ?, ?, 'active', NULL, NULL, '[]', 0)",
                 (story_id, save_id, household_id, sim_id),
@@ -101,7 +102,7 @@ class StoryTracker:
         return self._write(state, "status = ?", (status,))
 
     def _write(self, state, assignments, values):
-        with closing(sqlite3.connect(self.path)) as connection, connection:
+        with database_session(self.path, self.connection) as connection:
             cursor = connection.execute(
                 "UPDATE stories SET " + assignments + ", revision = revision + 1 "
                 "WHERE id = ? AND revision = ?",
