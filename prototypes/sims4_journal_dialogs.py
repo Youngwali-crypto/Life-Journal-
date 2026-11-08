@@ -5,6 +5,7 @@ No import-time registration; never auto-select a different Sim in callbacks.
 """
 
 import sqlite3
+from uuid import uuid4
 
 
 class S4CLJournalDialogs:
@@ -47,6 +48,18 @@ class S4CLJournalDialogs:
             actions.append(('Previous Page', lambda: self.show_page(section, page.number - 1)))
         if page.number + 1 < page.total:
             actions.append(('Next Page', lambda: self.show_page(section, page.number + 1)))
+        if section == 'Objectives':
+            for rule_id, title in self.journal.focus_options():
+                event_id = 'focus:' + uuid4().hex
+                def choose(rule=rule_id, occurrence=event_id):
+                    try:
+                        self.journal.choose_focus(rule, self.clock(), occurrence)
+                    except ValueError:
+                        return self._menu('Focus changed',
+                            'This option may have changed. Refresh the Journal to see current choices.',
+                            [('Refresh', lambda: self.show_page('Objectives'))])
+                    return self.show_page('Objectives')
+                actions.append(('Focus: ' + title, choose))
         if section == 'Personal Entries':
             actions.append(('Write an Entry', self.write_entry))
         return self._menu('{} · {}/{}'.format(page.title, page.number + 1, page.total),

@@ -75,6 +75,18 @@ class JournalInterface:
         selected = rows[number * size:(number + 1) * size]
         return JournalPage(section, '\n\n'.join(selected) or 'Nothing recorded here yet.', number, total)
 
+    def focus_options(self):
+        state, _ = self._story()
+        if state is None or not hasattr(self.flow, 'response_previews'):
+            return ()
+        return self.flow.response_previews(self.story_id)
+
+    def choose_focus(self, rule_id, now, event_id):
+        self._story()
+        if self.flow is None or not hasattr(self.flow, 'choose_response'):
+            raise ValueError('No responsive story is active')
+        return self.flow.choose_response(self.story_id, rule_id, now, event_id)
+
     def begin_entry(self):
         self._check()
         draft = uuid4().hex
