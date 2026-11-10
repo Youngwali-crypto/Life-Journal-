@@ -34,16 +34,28 @@ class JournalAccessDialogs:
     def order(self):
         journal = self.dialogs.journal
         journal._check()
-        now = self.dialogs.clock()
         if self.debit_once is None:
             self.access.order(journal.save_id, journal.sim_id, self.household_id,
-                              now, self.delivery_minutes)
-        else:
-            order = self.access.order_paid(journal.save_id, journal.sim_id,
-                                           self.household_id, now, self.debit_once)
-            if order is None:
-                return self.dialogs._menu("Insufficient funds",
-                    "The household needs §200 to order Life Journal.", [("Back", self.open)])
+                              self.dialogs.clock(), self.delivery_minutes)
+            return self.open()
+        if self.access.state(journal.save_id, journal.sim_id) is not None:
+            return self.open()
+        price = self.access.PRICE
+        return self.dialogs._menu(
+            "Order Life Journal for §{}?".format(price),
+            "Your package will arrive at your front door tomorrow at 9:00 AM.",
+            [("Place Order", self._place_paid_order), ("Cancel", lambda: None)],
+        )
+
+    def _place_paid_order(self):
+        journal = self.dialogs.journal
+        journal._check()
+        order = self.access.order_paid(journal.save_id, journal.sim_id,
+                                       self.household_id, self.dialogs.clock(), self.debit_once)
+        if order is None:
+            return self.dialogs._menu("Insufficient funds",
+                "The household needs §{} to order Life Journal.".format(self.access.PRICE),
+                [("Back", self.open)])
         return self.open()
 
     def start_free(self):

@@ -51,3 +51,32 @@ class PaidOrderTests(TestCase):
         self.assertEqual(self.order(30).ordered_at, 20)
         self.assertEqual(self.balance, 300)
         self.assertEqual(len(self.charges), 1)
+
+    def test_confirmation_cancel_and_repeat_from_two_menus(self):
+        from unittest.mock import Mock
+        from prototypes.journal_access_dialogs import JournalAccessDialogs
+
+        def new_menu():
+            dialogs = Mock()
+            dialogs.journal.save_id = "save"
+            dialogs.journal.sim_id = "sim"
+            dialogs.clock.return_value = 20
+            return JournalAccessDialogs(self.access, dialogs, "house", 60,
+                                        debit_once=self.debit)
+
+        phone = new_menu()
+        computer = new_menu()
+        phone.order()
+        phone_actions = dict(phone.dialogs._menu.call_args[0][2])
+        phone_actions["Cancel"]()
+        self.assertIsNone(self.access.state("save", "sim"))
+        self.assertEqual(self.balance, 500)
+
+        phone.order()
+        computer.order()
+        dict(phone.dialogs._menu.call_args[0][2])["Place Order"]()
+        dict(computer.dialogs._menu.call_args[0][2])["Place Order"]()
+        self.assertEqual(self.balance, 300)
+        self.assertEqual(len(self.charges), 1)
+        computer.order()
+        self.assertEqual(computer.dialogs._menu.call_args[0][0], "Journal on its way")
