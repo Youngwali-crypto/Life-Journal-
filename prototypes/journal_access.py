@@ -2,7 +2,7 @@
 
 Physical delivery is an external adapter responsibility. A receipt is committed
 only after that adapter confirms delivery for the exact order and recipient.
-No objects, funds, real-world addresses or timers are manipulated here.
+Paid orders delegate funds to a trusted, idempotent wallet adapter.
 """
 from dataclasses import dataclass
 from uuid import uuid4
@@ -40,6 +40,59 @@ class JournalAccess:
                 mode TEXT, UNIQUE(save_id, sim_id), UNIQUE(save_id, receipt_id)
             )''')
 
+            connection.execute("""CREATE TABLE IF NOT EXISTS journal_purchase (
+                save_id TEXT NOT NULL, sim_id TEXT NOT NULL,
+                household_id TEXT NOT NULL, order_id TEXT NOT NULL,
+                ordered_at INTEGER NOT NULL, due_at INTEGER NOT NULL,
+                PRIMARY KEY (save_id, sim_id)
+            )""")
+
+    PRICE = 200
+
+    def order_paid(self, save_id, sim_id, household_id, now, debit_once):
+        """Shared phone/computer path. Debit returns True for a new or prior charge.
+
+        A False result guarantees no charge. Exceptions are ambiguous and leave
+        the reservation intact so retry uses the same payment key.
+        """
+        self._identity(save_id, sim_id, household_id)
+        self._time(now)
+        owner = (save_id, sim_id)
+        reservation_query = "SELECT household_id, order_id, ordered_at, due_at FROM journal_purchase WHERE save_id=? AND sim_id=?"
+        with database_session(self.path) as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            existing = self._read(connection, *owner)
+            if existing:
+                return existing
+            if connection.execute(reservation_query, owner).fetchone() is None:
+                due_at = (now // 1440 + 1) * 1440 + 9 * 60
+                connection.execute("INSERT INTO journal_purchase VALUES (?, ?, ?, ?, ?, ?)",
+                                   owner + (household_id, uuid4().hex, now, due_at))
+
+        with database_session(self.path) as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            existing = self._read(connection, *owner)
+            if existing:
+                return existing
+            reservation = connection.execute(reservation_query, owner).fetchone()
+            if reservation is None:
+                return None
+            reserved_household, order_id, ordered_at, due_at = reservation
+            if reserved_household != household_id:
+                raise ValueError("Pending payment belongs to a different household")
+            paid = debit_once(save_id, household_id, order_id, self.PRICE)
+            if paid is not True and paid is not False:
+                raise ValueError("Wallet must report whether the debit succeeded")
+            if paid:
+                connection.execute("INSERT INTO journal_access VALUES (?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL)",
+                                   (order_id, save_id, sim_id, household_id, ordered_at, due_at))
+                state = self._read(connection, *owner)
+                self._record(connection, state, "journal_ordered", "Life Journal ordered.", ordered_at)
+            else:
+                state = None
+            connection.execute("DELETE FROM journal_purchase WHERE save_id=? AND sim_id=?", owner)
+            return state
+
     @staticmethod
     def _time(now):
         if type(now) is not int or now < 0:
@@ -72,6 +125,9 @@ class JournalAccess:
                 if existing.household_id != household_id:
                     raise ValueError('Recipient moved; reconcile the existing order')
                 return existing
+            if connection.execute("SELECT 1 FROM journal_purchase WHERE save_id=? AND sim_id=?",
+                                  (save_id, sim_id)).fetchone():
+                raise ValueError("Finish the pending paid order first")
             connection.execute('INSERT INTO journal_access VALUES (?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL)',
                                (uuid4().hex, save_id, sim_id, household_id, now, now + delivery_minutes))
             state = self._read(connection, save_id, sim_id)
