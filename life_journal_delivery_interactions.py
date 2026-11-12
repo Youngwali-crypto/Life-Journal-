@@ -5,25 +5,46 @@ from sims4communitylib.events.zone_update.events.zone_update_event import S4CLZo
 from life_journal_order_interaction import OrderLifeJournalInteraction
 from life_journal_probe import session
 from prototypes.delivery_runtime import DeliveryRuntime
+from prototypes.game_context import home_context, sim_minutes
 
 
 _binding = None
 
 
 def bind_delivery(delivery, save_id, household_id, clock, resolve_parcel,
-                  owns_planner, journal_for):
+                  owns_planner, journal_for, *, context_is_current=None):
     """Bind verified adapters for the loaded home lot.
 
     resolve_parcel returns the stable parcel ID or None for unrelated objects.
     owns_planner verifies the actual object and owning Sim. journal_for returns
     owner-bound Journal dialogs using the current session guard.
     """
-    current = session.guard()
+    lot_is_current = session.guard()
+
+    def current():
+        return lot_is_current() and (context_is_current is None or context_is_current())
+
     if not current():
         raise ValueError("Delivery requires an active zone")
     global _binding
     _binding = (DeliveryRuntime(delivery, save_id, household_id, clock, current),
                 resolve_parcel, owns_planner, journal_for)
+
+
+def bind_home_delivery(delivery, resolve_parcel, owns_planner, journal_for):
+    """Called by the game bootstrap when object adapters are available."""
+    import services
+    from date_and_time import sim_ticks_per_day
+
+    identity = home_context(services)
+    if identity is None:
+        return False
+    save_id, household_id = identity
+    bind_delivery(delivery, save_id, household_id,
+                  lambda: sim_minutes(services, sim_ticks_per_day()),
+                  resolve_parcel, owns_planner, journal_for,
+                  context_is_current=lambda: home_context(services) == identity)
+    return True
 
 
 class LifeJournalDeliveryEvents:
