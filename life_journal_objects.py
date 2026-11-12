@@ -64,3 +64,12 @@ class JournalObjects:
             return True
         self.spawn.destroy_object(planner, cause="Life Journal inventory transfer failed")
         return False
+
+    def remove_parcel(self, save_id, order_id, parcel_id):
+        """Remove the marked box after its receipt has been saved."""
+        if parcel_id != order_id:
+            return
+        key = (save_id, order_id, "parcel")
+        parcel = self.find_parcel(key)
+        if parcel is not None and self.matches(parcel, key):
+            self.spawn.destroy_object(parcel, cause="Life Journal package collected")

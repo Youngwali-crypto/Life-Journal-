@@ -67,3 +67,20 @@ class DeliveryCoordinatorTests(TestCase):
         self.assertFalse(runtime.open_planner("sim", True, open_journal))
         self.assertIsNone(runtime.collect("sim", "box"))
         open_journal.assert_called_once()
+
+    def test_box_cleanup_waits_for_saved_receipt(self):
+        from unittest.mock import patch
+
+        remove = Mock(side_effect=lambda *args: self.assertEqual(
+            self.access.opening("save", "sim"), "setup"))
+        delivery = JournalDelivery(self.access, self.place, self.transfer, remove_parcel=remove)
+        delivery.deliver("save", "sim", 1980)
+        self.transfer.return_value = False
+        self.assertIsNone(delivery.collect("save", "sim", "box", 1980))
+        self.transfer.return_value = True
+        with patch.object(self.access, "receive", side_effect=RuntimeError("disk")):
+            with self.assertRaises(RuntimeError):
+                delivery.collect("save", "sim", "box", 1981)
+        remove.assert_not_called()
+        delivery.collect("save", "sim", "box", 1982)
+        remove.assert_called_once_with("save", self.order.order_id, "box")

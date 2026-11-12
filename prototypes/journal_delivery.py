@@ -3,10 +3,11 @@ from .database_session import database_session
 
 
 class JournalDelivery:
-    def __init__(self, access, place_parcel_once, collect_journal_once):
+    def __init__(self, access, place_parcel_once, collect_journal_once, *, remove_parcel=None):
         self.access = access
         self.place_parcel_once = place_parcel_once
         self.collect_journal_once = collect_journal_once
+        self.remove_parcel = remove_parcel
         with database_session(access.path) as connection:
             connection.execute("""
                 CREATE TABLE IF NOT EXISTS journal_parcel (
@@ -59,9 +60,11 @@ class JournalDelivery:
             ).fetchone()
         if row is None or row[0] != parcel_id:
             return None
-        if order.received_at is not None:
-            return order
-        if self.collect_journal_once(save_id, actor_id, order.order_id, parcel_id) is not True:
-            return None
-        return self.access.receive(save_id, actor_id, order.household_id,
-                                   order.order_id, order.order_id, now)
+        if order.received_at is None:
+            if self.collect_journal_once(save_id, actor_id, order.order_id, parcel_id) is not True:
+                return None
+            order = self.access.receive(save_id, actor_id, order.household_id,
+                                        order.order_id, order.order_id, now)
+        if self.remove_parcel is not None:
+            self.remove_parcel(save_id, order.order_id, parcel_id)
+        return order
