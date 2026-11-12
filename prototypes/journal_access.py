@@ -49,7 +49,7 @@ class JournalAccess:
 
     PRICE = 200
 
-    def order_paid(self, save_id, sim_id, household_id, now, debit_once):
+    def order_paid(self, save_id, sim_id, household_id, now, debit_once, *, replace_order_id=None):
         """Shared phone/computer path. Debit returns True for a new or prior charge.
 
         A False result guarantees no charge. Exceptions are ambiguous and leave
@@ -57,12 +57,22 @@ class JournalAccess:
         """
         self._identity(save_id, sim_id, household_id)
         self._time(now)
+        if replace_order_id is not None:
+            self._identity(replace_order_id)
+
+        def already_ordered(existing):
+            if replace_order_id is None:
+                return existing is not None
+            if existing is None:
+                raise ValueError("Replacement requires a previously collected Journal")
+            return existing.order_id != replace_order_id or existing.received_at is None
+
         owner = (save_id, sim_id)
         reservation_query = "SELECT household_id, order_id, ordered_at, due_at FROM journal_purchase WHERE save_id=? AND sim_id=?"
         with database_session(self.path) as connection:
             connection.execute("BEGIN IMMEDIATE")
             existing = self._read(connection, *owner)
-            if existing:
+            if already_ordered(existing):
                 return existing
             if connection.execute(reservation_query, owner).fetchone() is None:
                 due_at = (now // 1440 + 1) * 1440 + 9 * 60
@@ -72,7 +82,7 @@ class JournalAccess:
         with database_session(self.path) as connection:
             connection.execute("BEGIN IMMEDIATE")
             existing = self._read(connection, *owner)
-            if existing:
+            if already_ordered(existing):
                 return existing
             reservation = connection.execute(reservation_query, owner).fetchone()
             if reservation is None:
@@ -84,10 +94,20 @@ class JournalAccess:
             if paid is not True and paid is not False:
                 raise ValueError("Wallet must report whether the debit succeeded")
             if paid:
-                connection.execute("INSERT INTO journal_access VALUES (?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL)",
-                                   (order_id, save_id, sim_id, household_id, ordered_at, due_at))
+                if existing is None:
+                    connection.execute("INSERT INTO journal_access VALUES (?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL)",
+                                       (order_id, save_id, sim_id, household_id, ordered_at, due_at))
+                    category, message = "journal_ordered", "Life Journal ordered."
+                else:
+                    connection.execute("""
+                        UPDATE journal_access
+                        SET order_id=?, household_id=?, ordered_at=?, due_at=?,
+                            received_at=NULL, receipt_id=NULL
+                        WHERE save_id=? AND sim_id=?
+                    """, (order_id, household_id, ordered_at, due_at, save_id, sim_id))
+                    category, message = "journal_replacement_ordered", "Replacement Life Journal ordered."
                 state = self._read(connection, *owner)
-                self._record(connection, state, "journal_ordered", "Life Journal ordered.", ordered_at)
+                self._record(connection, state, category, message, ordered_at)
             else:
                 state = None
             connection.execute("DELETE FROM journal_purchase WHERE save_id=? AND sim_id=?", owner)
