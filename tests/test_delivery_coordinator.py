@@ -42,3 +42,28 @@ class DeliveryCoordinatorTests(TestCase):
         self.assertEqual(self.delivery.collect("save", "sim", "box", 1982), received)
         self.assertEqual(self.transfer.call_count, 2)
         self.wallet.assert_called_once()
+
+    def test_loaded_household_clock_drives_dropoff_and_stale_actions_stop(self):
+        from prototypes.delivery_runtime import DeliveryRuntime
+        from prototypes.zone_session import ZoneSession
+
+        session = ZoneSession()
+        zone = object()
+        session.start(zone)
+        clock = Mock(return_value=1979)
+        runtime = DeliveryRuntime(self.delivery, "save", "house", clock, session.guard())
+        runtime.tick()
+        self.place.assert_not_called()
+        clock.return_value = 1980
+        runtime.tick()
+        runtime.tick()
+        self.place.assert_called_once_with("save", "house", self.order.order_id)
+        open_journal = Mock()
+        self.assertFalse(runtime.open_planner("sim", True, open_journal))
+        self.assertIsNotNone(runtime.collect("sim", "box"))
+        self.assertFalse(runtime.open_planner("sim", False, open_journal))
+        self.assertTrue(runtime.open_planner("sim", True, open_journal))
+        session.stop(zone)
+        self.assertFalse(runtime.open_planner("sim", True, open_journal))
+        self.assertIsNone(runtime.collect("sim", "box"))
+        open_journal.assert_called_once()
