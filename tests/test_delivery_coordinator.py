@@ -100,3 +100,19 @@ class DeliveryCoordinatorTests(TestCase):
         delivery.collect("save", "sim", "box", 1984)
         self.assertEqual([call[0][0] for call in notify.call_args_list],
                          ["delivered", "collected"])
+
+    def test_express_command_runtime_retries_only_current_household(self):
+        from prototypes.delivery_runtime import DeliveryRuntime
+
+        clock = Mock(return_value=1980)
+        runtime = DeliveryRuntime(self.delivery, "save", "house", clock, lambda: True)
+        other = DeliveryRuntime(self.delivery, "save", "other", clock, lambda: True)
+        self.assertIsNone(runtime.retry_delivery("sim"))
+        self.place.assert_not_called()
+        self.place.side_effect = [None, "box"]
+        runtime.tick()
+        self.assertIsNone(other.retry_delivery("sim"))
+        self.assertEqual(runtime.retry_delivery("sim"), "box")
+        self.assertEqual(runtime.retry_delivery("sim"), "box")
+        self.assertEqual(self.place.call_count, 2)
+        self.wallet.assert_called_once()

@@ -1,4 +1,6 @@
 """S4CL entry points for loaded-zone delivery and the two object interactions."""
+import sims4.commands
+
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.zone_update.events.zone_update_event import S4CLZoneUpdateEvent
 
@@ -78,3 +80,24 @@ class OpenLifeJournalPlannerInteraction(OrderLifeJournalInteraction):
             owns_planner(interaction_sim, interaction_target),
             lambda: journal_for(interaction_sim).open(),
         )
+
+
+@sims4.commands.Command("lifejournal.express_delivery", command_type=sims4.commands.CommandType.Live)
+def express_delivery(_connection=None):
+    """Retry the active Sim's failed front-door delivery on their home lot."""
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+
+    output = sims4.commands.CheatOutput(_connection)
+    binding = _binding
+    if binding is None or not binding[0].current():
+        output("Life Journal: load the ordering household's home lot to retry delivery.")
+        return
+    sim = CommonSimUtils.get_active_sim_info()
+    if sim is None:
+        output("Life Journal: select the Sim who ordered the Journal.")
+        return
+    parcel = binding[0].retry_delivery(str(sim.sim_id))
+    if parcel is None:
+        output("Life Journal: no failed delivery could be completed. Check the active Sim and front door.")
+    else:
+        output("Life Journal: the package is at the front door.")

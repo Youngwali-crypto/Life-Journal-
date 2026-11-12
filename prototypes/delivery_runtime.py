@@ -29,6 +29,15 @@ class DeliveryRuntime:
             self.delivery.deliver(self.save_id, sim_id, now)
         self.last_tick = now
 
+    def retry_delivery(self, actor_id):
+        """Retry a failed drop-off for this lot's household."""
+        if not self.current():
+            return None
+        order = self.delivery.access.state(self.save_id, actor_id)
+        if order is None or order.household_id != self.household_id:
+            return None
+        return self.delivery.deliver(self.save_id, actor_id, self.clock(), express=True)
+
     def collect(self, actor_id, parcel_id):
         if self.current() and parcel_id is not None:
             return self.delivery.collect(self.save_id, actor_id, parcel_id, self.clock())
