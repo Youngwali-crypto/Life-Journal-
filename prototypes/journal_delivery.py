@@ -1,13 +1,19 @@
 """Coordinate delivery of a paid order and collection of its Journal."""
+import logging
+
 from .database_session import database_session
 
 
+log = logging.getLogger(__name__)
+
+
 class JournalDelivery:
-    def __init__(self, access, place_parcel_once, collect_journal_once, *, remove_parcel=None):
+    def __init__(self, access, place_parcel_once, collect_journal_once, *, remove_parcel=None, notify=None):
         self.access = access
         self.place_parcel_once = place_parcel_once
         self.collect_journal_once = collect_journal_once
         self.remove_parcel = remove_parcel
+        self.notify = notify
         with database_session(access.path) as connection:
             connection.execute("""
                 CREATE TABLE IF NOT EXISTS journal_parcel (
@@ -40,7 +46,17 @@ class JournalDelivery:
                 self.access._identity(parcel_id)
             connection.execute("INSERT OR REPLACE INTO journal_parcel VALUES (?, ?)",
                                (order.order_id, parcel_id))
-            return parcel_id
+        if parcel_id is not None:
+            self._notify("delivered")
+        return parcel_id
+
+    def _notify(self, event):
+        if self.notify is None:
+            return
+        try:
+            self.notify(event)
+        except Exception:
+            log.exception("Life Journal %s notification failed", event)
 
     def collect(self, save_id, actor_id, parcel_id, now):
         """Transfer once into the ordering Sim's inventory, then unlock setup.
@@ -65,6 +81,7 @@ class JournalDelivery:
                 return None
             order = self.access.receive(save_id, actor_id, order.household_id,
                                         order.order_id, order.order_id, now)
+            self._notify("collected")
         if self.remove_parcel is not None:
             self.remove_parcel(save_id, order.order_id, parcel_id)
         return order

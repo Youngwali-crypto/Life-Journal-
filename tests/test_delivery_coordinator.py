@@ -84,3 +84,19 @@ class DeliveryCoordinatorTests(TestCase):
         remove.assert_not_called()
         delivery.collect("save", "sim", "box", 1982)
         remove.assert_called_once_with("save", self.order.order_id, "box")
+
+    def test_notifications_only_follow_successful_delivery_and_receipt(self):
+        notify = Mock()
+        delivery = JournalDelivery(self.access, self.place, self.transfer, notify=notify)
+        self.place.side_effect = [None, "box"]
+        self.transfer.side_effect = [False, True]
+        delivery.deliver("save", "sim", 1980)
+        notify.assert_not_called()
+        delivery.deliver("save", "sim", 1981, express=True)
+        delivery.deliver("save", "sim", 1982)
+        delivery.collect("save", "sim", "box", 1982)
+        notify.assert_called_once_with("delivered")
+        delivery.collect("save", "sim", "box", 1983)
+        delivery.collect("save", "sim", "box", 1984)
+        self.assertEqual([call[0][0] for call in notify.call_args_list],
+                         ["delivered", "collected"])

@@ -28,6 +28,14 @@ class JournalObjects:
         self.spawn = spawn
         self.inventory = inventory
 
+    def create_delivery(self, access):
+        """Build the coordinator the home-lot bootstrap passes to bind_home_delivery."""
+        from life_journal_notifications import show_delivery_notification
+        from prototypes.journal_delivery import JournalDelivery
+
+        return JournalDelivery(access, self.place_parcel_once, self.collect_journal_once,
+                               remove_parcel=self.remove_parcel, notify=show_delivery_notification)
+
     def place_parcel_once(self, save_id, household_id, order_id):
         key = (save_id, order_id, "parcel")
         if self.find_parcel(key) is not None:
