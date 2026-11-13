@@ -10,10 +10,8 @@ from zipfile import ZIP_DEFLATED, ZipFile
 SOURCES = (
     "life_journal_probe.py",
     "prototypes/zone_session.py",
-    "prototypes/journal_store.py",
+    "prototypes/json_journal_store.py",
     "prototypes/journal_entry_log.py",
-    "prototypes/database_session.py",
-    "prototypes/event_mapper.py",
 )
 
 
