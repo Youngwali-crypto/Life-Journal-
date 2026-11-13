@@ -1,5 +1,4 @@
 """Connect one loaded household's clock and object actions to JournalDelivery."""
-from .database_session import database_session
 
 
 class DeliveryRuntime:
@@ -18,14 +17,13 @@ class DeliveryRuntime:
         self.delivery.access._time(now)
         if self.last_tick == now:
             return
-        with database_session(self.delivery.access.path) as connection:
-            recipients = connection.execute("""
-                SELECT a.sim_id FROM journal_access a
-                LEFT JOIN journal_parcel p ON p.order_id = a.order_id
-                WHERE a.save_id = ? AND a.household_id = ? AND a.due_at <= ?
-                  AND a.received_at IS NULL AND p.parcel_id IS NULL
-            """, (self.save_id, self.household_id, now)).fetchall()
-        for (sim_id,) in recipients:
+        with self.delivery.access.store.transaction(write=False) as data:
+            recipients = [row["sim_id"] for row in data.get("orders", {}).values()
+                          if row["save_id"] == self.save_id
+                          and row["household_id"] == self.household_id
+                          and row["due_at"] <= now and row["received_at"] is None
+                          and data.get("parcels", {}).get(row["order_id"]) is None]
+        for sim_id in recipients:
             self.delivery.deliver(self.save_id, sim_id, now)
         self.last_tick = now
 

@@ -1,7 +1,6 @@
 """Coordinate delivery of a paid order and collection of its Journal."""
 import logging
 
-from .database_session import database_session
 
 
 log = logging.getLogger(__name__)
@@ -14,12 +13,6 @@ class JournalDelivery:
         self.collect_journal_once = collect_journal_once
         self.remove_parcel = remove_parcel
         self.notify = notify
-        with database_session(access.path) as connection:
-            connection.execute("""
-                CREATE TABLE IF NOT EXISTS journal_parcel (
-                    order_id TEXT PRIMARY KEY, parcel_id TEXT
-                )
-            """)
 
     def deliver(self, save_id, sim_id, now, *, express=False):
         """Return the parcel ID, or None if delivery is not possible yet.
@@ -28,24 +21,20 @@ class JournalDelivery:
         Repeating a call for an order ID must recover the same physical parcel.
         """
         self.access._time(now)
-        order = self.access.state(save_id, sim_id)
-        if order is None or order.received_at is not None or now < order.due_at:
-            return None
-        with database_session(self.access.path) as connection:
-            connection.execute("BEGIN IMMEDIATE")
-            row = connection.execute(
-                "SELECT parcel_id FROM journal_parcel WHERE order_id=?",
-                (order.order_id,),
-            ).fetchone()
-            if row and row[0] is not None:
-                return row[0]
-            if express and row is None:
+        with self.access.store.transaction() as data:
+            order = self.access._read(data, save_id, sim_id)
+            if order is None or order.received_at is not None or now < order.due_at:
+                return None
+            parcels = data.setdefault("parcels", {})
+            existing = parcels.get(order.order_id)
+            if existing is not None:
+                return existing
+            if express and order.order_id not in parcels:
                 return None
             parcel_id = self.place_parcel_once(save_id, order.household_id, order.order_id)
             if parcel_id is not None:
                 self.access._identity(parcel_id)
-            connection.execute("INSERT OR REPLACE INTO journal_parcel VALUES (?, ?)",
-                               (order.order_id, parcel_id))
+            parcels[order.order_id] = parcel_id
         if parcel_id is not None:
             self._notify("delivered")
         return parcel_id
@@ -69,13 +58,9 @@ class JournalDelivery:
         order = self.access.state(save_id, actor_id)
         if order is None or now < order.due_at:
             return None
-        with database_session(self.access.path) as connection:
-            row = connection.execute(
-                "SELECT parcel_id FROM journal_parcel WHERE order_id=?",
-                (order.order_id,),
-            ).fetchone()
-        if row is None or row[0] != parcel_id:
-            return None
+        with self.access.store.transaction(write=False) as data:
+            if data.get("parcels", {}).get(order.order_id) != parcel_id:
+                return None
         if order.received_at is None:
             if self.collect_journal_once(save_id, actor_id, order.order_id, parcel_id) is not True:
                 return None

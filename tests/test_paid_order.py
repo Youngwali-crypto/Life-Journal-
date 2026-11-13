@@ -82,7 +82,7 @@ class PaidOrderTests(TestCase):
         self.assertEqual(computer.dialogs._menu.call_args[0][0], "Journal on its way")
 
     def test_replacement_charges_once_and_keeps_setup_and_history(self):
-        from prototypes.journal_store import JournalStore
+        from prototypes.json_journal_store import JsonJournalStore as JournalStore
 
         first = self.order(10)
         self.access.receive("save", "sim", "house", first.order_id, "first-box", 1980)

@@ -1,6 +1,7 @@
 """File-backed Journal entries for game runtimes without SQLite."""
 import json
 import os
+from contextlib import contextmanager
 from dataclasses import asdict
 from pathlib import Path
 from tempfile import NamedTemporaryFile
@@ -31,26 +32,40 @@ class JsonJournalStore:
     def record_entry(self, save_id, sim_id, entry):
         if not save_id or not sim_id or not entry.id or not entry.text.strip():
             raise ValueError("An entry requires save, Sim, entry ID, and text")
+        with self.transaction() as data:
+            return self.record(data, save_id, sim_id, entry)
+
+    @staticmethod
+    def record(data, save_id, sim_id, entry):
+        for record in data["entries"]:
+            if (record["save_id"], record["sim_id"], record["entry"]["id"]) == (save_id, sim_id, entry.id):
+                return JournalEntry(**record["entry"])
+        data["entries"].append(dict(save_id=save_id, sim_id=sim_id, entry=asdict(entry)))
+        return entry
+
+    @contextmanager
+    def transaction(self, *, write=True):
         with _lock:
             data = self._read()
-            for record in data["entries"]:
-                if (record["save_id"], record["sim_id"], record["entry"]["id"]) == (save_id, sim_id, entry.id):
-                    return JournalEntry(**record["entry"])
-            data["entries"].append(dict(save_id=save_id, sim_id=sim_id, entry=asdict(entry)))
-            self.path.parent.mkdir(parents=True, exist_ok=True)
-            temporary = None
-            try:
-                with NamedTemporaryFile(mode="w", encoding="utf-8", dir=str(self.path.parent),
-                                        prefix=".life-journal-", delete=False) as stream:
-                    temporary = Path(stream.name)
-                    json.dump(data, stream, ensure_ascii=False)
-                    stream.flush()
-                    os.fsync(stream.fileno())
-                os.replace(str(temporary), str(self.path))
-            finally:
-                if temporary is not None and temporary.exists():
-                    temporary.unlink()
-            return entry
+            before = json.dumps(data) if write else None
+            yield data
+            if write and json.dumps(data) != before:
+                self._write(data)
+
+    def _write(self, data):
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        try:
+            with NamedTemporaryFile(mode="w", encoding="utf-8", dir=str(self.path.parent),
+                                    prefix=".life-journal-", delete=False) as stream:
+                temporary = Path(stream.name)
+                json.dump(data, stream, ensure_ascii=False)
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(str(temporary), str(self.path))
+        finally:
+            if temporary is not None and temporary.exists():
+                temporary.unlink()
 
     def entries(self, save_id, sim_id):
         with _lock:

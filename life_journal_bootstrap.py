@@ -3,14 +3,13 @@ from prototypes.game_context import home_context, sim_minutes
 from prototypes.journal_access import JournalAccess
 from prototypes.journal_access_dialogs import JournalAccessDialogs
 from prototypes.journal_interface import JournalInterface
-from prototypes.journal_store import JournalStore
 from prototypes.sims4_journal_dialogs import S4CLJournalDialogs
 
 
 def order_dialog_resolver(access, save_id, household_id, clock, current, household_for,
                           name_for, native_dialogs, debit_once, planner_is_missing=None):
     """Return an actor-bound dialog resolver that rechecks identity on each action."""
-    store = JournalStore(access.path)
+    store = access.store
 
     def resolve(actor):
         sim = getattr(actor, "sim_info", None)
