@@ -37,13 +37,13 @@ def check_storage():
     from tempfile import TemporaryDirectory
 
     from prototypes.journal_entry_log import JournalEntry
-    from prototypes.journal_store import JournalStore
+    from prototypes.json_journal_store import JsonJournalStore
 
     with TemporaryDirectory(prefix="life-journal-probe-") as directory:
-        path = Path(directory) / "probe.db"
+        path = Path(directory) / "probe.json"
         entry = JournalEntry("probe", "player", "personal", "Probe", 0)
-        JournalStore(path).record_entry("probe-save", "probe-sim", entry)
-        if JournalStore(path).entries("probe-save", "probe-sim") != (entry,):
+        JsonJournalStore(path).record_entry("probe-save", "probe-sim", entry)
+        if JsonJournalStore(path).entries("probe-save", "probe-sim") != (entry,):
             raise RuntimeError("Journal entry did not round-trip")
 
 
@@ -63,6 +63,6 @@ def diagnostics(_connection=None):
         output("S4CL dialog imports FAILED: {}: {}".format(type(error).__name__, error))
     try:
         check_storage()
-        output("Journal SQLite write/read OK")
+        output("Journal JSON write/read OK")
     except Exception as error:
-        output("Journal SQLite FAILED: {}: {}".format(type(error).__name__, error))
+        output("Journal JSON FAILED: {}: {}".format(type(error).__name__, error))

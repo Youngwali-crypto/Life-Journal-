@@ -4,13 +4,12 @@ Physical delivery is an external adapter responsibility. A receipt is committed
 only after that adapter confirms delivery for the exact order and recipient.
 Paid orders delegate funds to a trusted, idempotent wallet adapter.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict, replace
 from uuid import uuid4
 from typing import Optional
 
-from .database_session import database_session
 from .journal_entry_log import JournalEntry
-from .journal_store import JournalStore
+from .json_journal_store import JsonJournalStore
 
 
 @dataclass(frozen=True)
@@ -28,28 +27,13 @@ class JournalAccessState:
 
 
 class JournalAccess:
-    def __init__(self, path):
+    def __init__(self, path, *, store=None):
         self.path = str(path)
-        JournalStore(path)
-        with database_session(self.path) as connection:
-            connection.execute('''CREATE TABLE IF NOT EXISTS journal_access (
-                order_id TEXT PRIMARY KEY, save_id TEXT NOT NULL,
-                sim_id TEXT NOT NULL, household_id TEXT NOT NULL,
-                ordered_at INTEGER NOT NULL, due_at INTEGER NOT NULL,
-                received_at INTEGER, receipt_id TEXT, activated_at INTEGER,
-                mode TEXT, UNIQUE(save_id, sim_id), UNIQUE(save_id, receipt_id)
-            )''')
-
-            connection.execute("""CREATE TABLE IF NOT EXISTS journal_purchase (
-                save_id TEXT NOT NULL, sim_id TEXT NOT NULL,
-                household_id TEXT NOT NULL, order_id TEXT NOT NULL,
-                ordered_at INTEGER NOT NULL, due_at INTEGER NOT NULL,
-                PRIMARY KEY (save_id, sim_id)
-            )""")
+        self.store = store if store is not None else JsonJournalStore(path)
 
     PRICE = 200
 
-    def order_paid(self, save_id, sim_id, household_id, now, debit_once):
+    def order_paid(self, save_id, sim_id, household_id, now, debit_once, *, replace_order_id=None):
         """Shared phone/computer path. Debit returns True for a new or prior charge.
 
         A False result guarantees no charge. Exceptions are ambiguous and leave
@@ -57,24 +41,32 @@ class JournalAccess:
         """
         self._identity(save_id, sim_id, household_id)
         self._time(now)
-        owner = (save_id, sim_id)
-        reservation_query = "SELECT household_id, order_id, ordered_at, due_at FROM journal_purchase WHERE save_id=? AND sim_id=?"
-        with database_session(self.path) as connection:
-            connection.execute("BEGIN IMMEDIATE")
-            existing = self._read(connection, *owner)
-            if existing:
-                return existing
-            if connection.execute(reservation_query, owner).fetchone() is None:
-                due_at = (now // 1440 + 1) * 1440 + 9 * 60
-                connection.execute("INSERT INTO journal_purchase VALUES (?, ?, ?, ?, ?, ?)",
-                                   owner + (household_id, uuid4().hex, now, due_at))
+        if replace_order_id is not None:
+            self._identity(replace_order_id)
 
-        with database_session(self.path) as connection:
-            connection.execute("BEGIN IMMEDIATE")
-            existing = self._read(connection, *owner)
-            if existing:
+        def already_ordered(existing):
+            if replace_order_id is None:
+                return existing is not None
+            if existing is None:
+                raise ValueError("Replacement requires a previously collected Journal")
+            return existing.order_id != replace_order_id or existing.received_at is None
+
+        owner = self._key(save_id, sim_id)
+        with self.store.transaction() as data:
+            existing = self._read(data, save_id, sim_id)
+            if already_ordered(existing):
                 return existing
-            reservation = connection.execute(reservation_query, owner).fetchone()
+            reservations = data.setdefault("purchases", {})
+            if owner not in reservations:
+                due_at = (now // 1440 + 1) * 1440 + 9 * 60
+                reservations[owner] = [household_id, uuid4().hex, now, due_at]
+
+        with self.store.transaction() as data:
+            existing = self._read(data, save_id, sim_id)
+            if already_ordered(existing):
+                return existing
+            reservations = data.setdefault("purchases", {})
+            reservation = reservations.get(owner)
             if reservation is None:
                 return None
             reserved_household, order_id, ordered_at, due_at = reservation
@@ -84,13 +76,17 @@ class JournalAccess:
             if paid is not True and paid is not False:
                 raise ValueError("Wallet must report whether the debit succeeded")
             if paid:
-                connection.execute("INSERT INTO journal_access VALUES (?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL)",
-                                   (order_id, save_id, sim_id, household_id, ordered_at, due_at))
-                state = self._read(connection, *owner)
-                self._record(connection, state, "journal_ordered", "Life Journal ordered.", ordered_at)
+                state = JournalAccessState(order_id, save_id, sim_id, household_id, ordered_at,
+                                           due_at, None, None,
+                                           existing.activated_at if existing else None,
+                                           existing.mode if existing else None)
+                self._put(data, state)
+                category = "journal_replacement_ordered" if existing else "journal_ordered"
+                message = "Replacement Life Journal ordered." if existing else "Life Journal ordered."
+                self._record(data, state, category, message, ordered_at)
             else:
                 state = None
-            connection.execute("DELETE FROM journal_purchase WHERE save_id=? AND sim_id=?", owner)
+            del reservations[owner]
             return state
 
     @staticmethod
@@ -104,34 +100,38 @@ class JournalAccess:
             raise ValueError('Nonempty identity is required')
 
     @staticmethod
-    def _read(connection, save_id, sim_id):
-        row = connection.execute('SELECT * FROM journal_access WHERE save_id=? AND sim_id=?',
-                                 (save_id, sim_id)).fetchone()
-        return JournalAccessState(*row) if row else None
+    def _key(save_id, sim_id):
+        import json
+        return json.dumps([save_id, sim_id])
+
+    def _read(self, data, save_id, sim_id):
+        row = data.get("orders", {}).get(self._key(save_id, sim_id))
+        return JournalAccessState(**row) if row else None
+
+    def _put(self, data, state):
+        data.setdefault("orders", {})[self._key(state.save_id, state.sim_id)] = asdict(state)
 
     def state(self, save_id, sim_id):
         self._identity(save_id, sim_id)
-        with database_session(self.path) as connection:
-            return self._read(connection, save_id, sim_id)
+        with self.store.transaction(write=False) as data:
+            return self._read(data, save_id, sim_id)
 
     def order(self, save_id, sim_id, household_id, now, delivery_minutes):
         self._identity(save_id, sim_id, household_id)
         self._time(now)
         self._time(delivery_minutes)
-        with database_session(self.path) as connection:
-            connection.execute('BEGIN IMMEDIATE')
-            existing = self._read(connection, save_id, sim_id)
+        with self.store.transaction() as data:
+            existing = self._read(data, save_id, sim_id)
             if existing:
                 if existing.household_id != household_id:
                     raise ValueError('Recipient moved; reconcile the existing order')
                 return existing
-            if connection.execute("SELECT 1 FROM journal_purchase WHERE save_id=? AND sim_id=?",
-                                  (save_id, sim_id)).fetchone():
+            if self._key(save_id, sim_id) in data.get("purchases", {}):
                 raise ValueError("Finish the pending paid order first")
-            connection.execute('INSERT INTO journal_access VALUES (?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL)',
-                               (uuid4().hex, save_id, sim_id, household_id, now, now + delivery_minutes))
-            state = self._read(connection, save_id, sim_id)
-            self._record(connection, state, 'journal_ordered', 'Life Journal ordered.', now)
+            state = JournalAccessState(uuid4().hex, save_id, sim_id, household_id,
+                                       now, now + delivery_minutes, None, None, None, None)
+            self._put(data, state)
+            self._record(data, state, 'journal_ordered', 'Life Journal ordered.', now)
             return state
 
     def receive(self, save_id, sim_id, household_id, order_id, receipt_id, now):
@@ -142,9 +142,8 @@ class JournalAccess:
         """
         self._identity(save_id, sim_id, household_id, order_id, receipt_id)
         self._time(now)
-        with database_session(self.path) as connection:
-            connection.execute('BEGIN IMMEDIATE')
-            state = self._read(connection, save_id, sim_id)
+        with self.store.transaction() as data:
+            state = self._read(data, save_id, sim_id)
             if state is None or (state.order_id, state.household_id) != (order_id, household_id):
                 raise ValueError('Delivery does not match the order and recipient')
             if state.received_at is not None:
@@ -153,10 +152,13 @@ class JournalAccess:
                 return state
             if now < state.due_at:
                 raise ValueError('Delivery is not due yet')
-            connection.execute('UPDATE journal_access SET received_at=?, receipt_id=? WHERE order_id=?',
-                               (now, receipt_id, order_id))
-            self._record(connection, state, 'journal_received', 'Life Journal received.', now)
-            return self._read(connection, save_id, sim_id)
+            if any(row["save_id"] == save_id and row["receipt_id"] == receipt_id
+                   for row in data.get("orders", {}).values()):
+                raise ValueError("Receipt already belongs to another order")
+            state = replace(state, received_at=now, receipt_id=receipt_id)
+            self._put(data, state)
+            self._record(data, state, 'journal_received', 'Life Journal received.', now)
+            return self._read(data, save_id, sim_id)
 
     def opening(self, save_id, sim_id):
         state = self.state(save_id, sim_id)
@@ -169,22 +171,21 @@ class JournalAccess:
     def start_free_journal(self, save_id, sim_id, now):
         self._identity(save_id, sim_id)
         self._time(now)
-        with database_session(self.path) as connection:
-            connection.execute('BEGIN IMMEDIATE')
-            state = self._read(connection, save_id, sim_id)
+        with self.store.transaction() as data:
+            state = self._read(data, save_id, sim_id)
             if state is None or state.received_at is None:
                 raise ValueError('Receive the Journal before starting it')
             if now < state.received_at:
                 raise ValueError('Opening cannot precede delivery')
             if state.activated_at is not None:
                 return state
-            connection.execute("UPDATE journal_access SET activated_at=?, mode='free' WHERE order_id=?",
-                               (now, state.order_id))
-            self._record(connection, state, 'journal_started', 'Free Journal started.', now)
-            return self._read(connection, save_id, sim_id)
+            state = replace(state, activated_at=now, mode="free")
+            self._put(data, state)
+            self._record(data, state, 'journal_started', 'Free Journal started.', now)
+            return self._read(data, save_id, sim_id)
 
     @staticmethod
-    def _record(connection, state, category, text, now):
-        JournalStore('', connection=connection).record_entry(state.save_id, state.sim_id,
+    def _record(data, state, category, text, now):
+        JsonJournalStore.record(data, state.save_id, state.sim_id,
             JournalEntry('access:' + state.order_id + ':' + category,
                          'system', category, text, now))

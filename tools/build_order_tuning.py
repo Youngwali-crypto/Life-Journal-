@@ -20,6 +20,8 @@ def build(output, computer_ids, display_key):
         action = ET.Element("I", c="OrderLifeJournalInteraction", i="interaction",
                             m="life_journal_order_interaction", n=name, s=str(ids[surface]))
         ET.SubElement(action, "T", n="display_name").text = "0x{:08X}".format(display_key)
+        if surface == "Computer":
+            ET.SubElement(action, "T", n="category").text = "98910"
         ET.SubElement(action, "T", n="allow_autonomous").text = "False"
         ET.SubElement(action, "T", n="allow_user_directed").text = "True"
         ET.ElementTree(action).write(str(output / (name + ".xml")), encoding="utf-8", xml_declaration=True)
@@ -31,12 +33,17 @@ def build(output, computer_ids, display_key):
     ET.SubElement(phones, "T").text = str(ids["Phone"])
     objects = ET.SubElement(snippet, "L", n="add_interactions_to_objects")
     entry = ET.SubElement(objects, "U")
-    selection = ET.SubElement(entry, "V", n="object_selection", t="object_list")
-    selection = ET.SubElement(selection, "U", n="object_list")
-    targets = ET.SubElement(selection, "L", n="object_list")
-    for object_id in sorted(set(computer_ids)):
-        ET.SubElement(targets, "T").text = str(object_id)
-    affordances = ET.SubElement(entry, "L", n="super_affordances")
+    if computer_ids:
+        selection = ET.SubElement(entry, "V", n="object_selection", t="object_list")
+        selection = ET.SubElement(selection, "U", n="object_list")
+        targets = ET.SubElement(selection, "L", n="object_list")
+        for object_id in sorted(set(computer_ids)):
+            ET.SubElement(targets, "T").text = str(object_id)
+    else:
+        selection = ET.SubElement(entry, "V", n="object_selection", t="objects_with_affordance")
+        selection = ET.SubElement(selection, "U", n="objects_with_affordance")
+        ET.SubElement(selection, "T", n="affordance").text = "99121"
+    affordances = ET.SubElement(entry, "L", n="_super_affordances")
     ET.SubElement(affordances, "T").text = str(ids["Computer"])
     ET.ElementTree(snippet).write(str(output / (name + ".xml")), encoding="utf-8", xml_declaration=True)
 
@@ -53,8 +60,8 @@ def resource_id(value):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--computer-id", action="append", required=True, type=resource_id,
-                        help="Verified computer object tuning ID. Repeat for multiple tunings.")
+    parser.add_argument("--computer-id", action="append", type=resource_id,
+                        help="Optional verified computer object tuning ID. Repeat for multiple tunings.")
     parser.add_argument("--display-key", required=True, type=resource_id,
                         help="String table key for Order Life Journal.")
     parser.add_argument("--output", required=True, type=Path)

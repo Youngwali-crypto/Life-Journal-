@@ -80,3 +80,26 @@ class PaidOrderTests(TestCase):
         self.assertEqual(len(self.charges), 1)
         computer.order()
         self.assertEqual(computer.dialogs._menu.call_args[0][0], "Journal on its way")
+
+    def test_replacement_charges_once_and_keeps_setup_and_history(self):
+        from prototypes.json_journal_store import JsonJournalStore as JournalStore
+
+        first = self.order(10)
+        self.access.receive("save", "sim", "house", first.order_id, "first-box", 1980)
+        self.access.start_free_journal("save", "sim", 1981)
+        previous = JournalStore(self.path).entries("save", "sim")
+        replace = lambda: self.access.order_paid("save", "sim", "house", 1982, self.debit,
+                                                replace_order_id=first.order_id)
+        with patch.object(self.access, "_record", side_effect=RuntimeError("disk")):
+            with self.assertRaises(RuntimeError):
+                replace()
+        replacement = replace()
+        self.assertNotEqual(replacement.order_id, first.order_id)
+        self.assertEqual(replacement.due_at, 3420)
+        self.assertEqual(replace(), replacement)
+        self.assertEqual(self.balance, 100)
+        self.assertEqual(self.access.opening("save", "sim"), "awaiting_delivery")
+        self.access.receive("save", "sim", "house", replacement.order_id, "new-box", 3420)
+        self.assertEqual(self.access.opening("save", "sim"), "journal")
+        self.assertEqual(JournalStore(self.path).entries("save", "sim")[:len(previous)], previous)
+        self.assertEqual(self.access.state("save", "sim").activated_at, 1981)
