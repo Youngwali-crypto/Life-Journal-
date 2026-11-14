@@ -88,10 +88,24 @@ def ordercheck(_connection=None):
                      or "computer" in str(getattr(obj, "definition", "")).lower()]
         output("Live computer candidates: {}".format(len(computers)))
         for obj in computers[:5]:
-            normal = tuple(getattr(obj, "_super_affordances", ()) or ())
-            locked = tuple(getattr(obj, "super_affordances", ()) or ())
-            attached = any(getattr(a, "guid64", None) == interaction_id
-                           for a in normal + locked)
-            output("Computer {}: order attached {}".format(getattr(obj, "id", "?"), attached))
+            for attribute in ("_super_affordances", "super_affordances"):
+                value = getattr(obj, attribute, None)
+                if callable(value):
+                    try:
+                        value = value()
+                    except Exception as error:
+                        output("Computer {} {} callable: {}".format(
+                            getattr(obj, "id", "?"), attribute, type(error).__name__))
+                        continue
+                try:
+                    affordances = tuple(value or ())
+                except TypeError:
+                    output("Computer {} {} is {}".format(
+                        getattr(obj, "id", "?"), attribute, type(value).__name__))
+                    continue
+                attached = any(getattr(a, "guid64", None) == interaction_id
+                               or a == interaction_id for a in affordances)
+                output("Computer {} {}: {} entries; order attached {}".format(
+                    getattr(obj, "id", "?"), attribute, len(affordances), attached))
     except Exception as error:
         output("Order check FAILED: {}: {}".format(type(error).__name__, error))
