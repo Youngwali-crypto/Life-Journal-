@@ -134,6 +134,25 @@ class JournalAccess:
             self._record(data, state, 'journal_ordered', 'Life Journal ordered.', now)
             return state
 
+    def restore_paid_beta_order(self, save_id, sim_id, household_id, now):
+        """One-time player-requested recovery for an order lost by beta storage.
+
+        This does not charge funds. It is offered only in the beta computer UI
+        and must not be used as proof that a physical object was delivered.
+        """
+        self._identity(save_id, sim_id, household_id)
+        self._time(now)
+        with self.store.transaction() as data:
+            existing = self._read(data, save_id, sim_id)
+            if existing is not None:
+                return existing
+            state = JournalAccessState(uuid4().hex, save_id, sim_id, household_id,
+                                       now, now, None, None, None, None)
+            self._put(data, state)
+            self._record(data, state, 'journal_order_restored',
+                         'Earlier paid beta order restored without another charge.', now)
+            return state
+
     def receive(self, save_id, sim_id, household_id, order_id, receipt_id, now):
         """Trusted adapter calls only after confirming actual physical delivery.
 
