@@ -7,7 +7,8 @@ and order markers that survive game saves. Run these operations on the game thre
 
 class JournalObjects:
     def __init__(self, parcel_definition, planner_definition, front_door_location,
-                 find_parcel, resolve_sim, mark, matches, *, spawn=None, inventory=None):
+                 find_parcel, resolve_sim, mark, matches, *, spawn=None, inventory=None,
+                 home_drop_location=None):
         if (type(parcel_definition) is not int or type(planner_definition) is not int
                 or min(parcel_definition, planner_definition) <= 0
                 or parcel_definition == planner_definition):
@@ -21,6 +22,7 @@ class JournalObjects:
         self.parcel_definition = parcel_definition
         self.planner_definition = planner_definition
         self.front_door_location = front_door_location
+        self.home_drop_location = home_drop_location
         self.find_parcel = find_parcel
         self.resolve_sim = resolve_sim
         self.mark = mark
@@ -40,14 +42,21 @@ class JournalObjects:
         key = (save_id, order_id, "parcel")
         if self.find_parcel(key) is not None:
             return order_id
-        location = self.front_door_location(save_id, household_id)
-        if location is None:
-            return None
-        parcel = self.spawn.spawn_object_on_lot(
-            self.parcel_definition, location,
-            on_object_initialize_callback=lambda obj: self.mark(obj, key),
-        )
-        return order_id if parcel is not None else None
+        locations = [self.front_door_location(save_id, household_id)]
+        if self.home_drop_location is not None:
+            fallback = self.home_drop_location(save_id, household_id)
+            if fallback not in locations:
+                locations.append(fallback)
+        for location in locations:
+            if location is None:
+                continue
+            parcel = self.spawn.spawn_object_on_lot(
+                self.parcel_definition, location,
+                on_object_initialize_callback=lambda obj: self.mark(obj, key),
+            )
+            if parcel is not None:
+                return order_id
+        return None
 
     def collect_journal_once(self, save_id, sim_id, order_id, parcel_id):
         if parcel_id != order_id:
