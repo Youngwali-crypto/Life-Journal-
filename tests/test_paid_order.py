@@ -142,3 +142,24 @@ class PaidOrderTests(TestCase):
         ui.order()
         self.assertEqual(dialogs._menu.call_args[0][0], 'Journal on its way')
         self.assertIsNone(self.access.state('save', 'sim').received_at)
+
+    def test_lost_beta_order_can_be_restored_once_without_second_charge(self):
+        from unittest.mock import Mock
+        from prototypes.journal_access_dialogs import JournalAccessDialogs
+
+        dialogs = Mock()
+        dialogs.journal.save_id = 'save'
+        dialogs.journal.sim_id = 'sim'
+        dialogs.clock.return_value = 2000
+        ui = JournalAccessDialogs(self.access, dialogs, 'house', 0,
+                                  debit_once=self.debit, beta_home_delivery=True)
+        ui.order()
+        self.assertEqual(dialogs._menu.call_args[0][0], 'Life Journal order')
+        restore = dict(dialogs._menu.call_args[0][2])['Restore Earlier Paid Order']
+        restore()
+        self.assertEqual(dialogs._menu.call_args[0][0], 'Life Journal delivery is ready')
+        original = self.access.state('save', 'sim')
+        self.access = JournalAccess(self.path)
+        self.assertEqual(self.access.state('save', 'sim'), original)
+        self.assertEqual(self.access.restore_paid_beta_order('save', 'sim', 'house', 2001), original)
+        self.assertEqual(self.balance, 500)
