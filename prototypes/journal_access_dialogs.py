@@ -4,6 +4,8 @@ A trusted game bootstrap supplies owner-verified dialogs and current-session
 checks. There is deliberately no player-facing 'mark delivered' button.
 """
 
+from .household_payment import PaymentUncertain
+
 
 class JournalAccessDialogs:
     def __init__(self, access, dialogs, household_id, delivery_minutes, *, debit_once=None, planner_is_missing=None):
@@ -66,9 +68,13 @@ class JournalAccessDialogs:
             existing = self.access.state(journal.save_id, journal.sim_id)
             if existing is None or existing.order_id != replacement_id or not self._can_replace(existing):
                 return self.open()
-        order = self.access.order_paid(journal.save_id, journal.sim_id,
-                                       self.household_id, self.dialogs.clock(), self.debit_once,
-                                       replace_order_id=replacement_id)
+        try:
+            order = self.access.order_paid(journal.save_id, journal.sim_id,
+                                           self.household_id, self.dialogs.clock(), self.debit_once,
+                                           replace_order_id=replacement_id)
+        except (PaymentUncertain, OSError) as error:
+            return self.dialogs._menu('Order could not be completed', str(error),
+                                      [('Close', lambda: None)])
         if order is None:
             return self.dialogs._menu("Insufficient funds",
                 "The household needs §{} to order Life Journal.".format(self.access.PRICE),

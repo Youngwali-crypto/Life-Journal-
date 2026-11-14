@@ -15,12 +15,12 @@ SOURCES = (
 )
 
 
-def build(source_root, output):
+def build(source_root, output, source_names=SOURCES):
     with TemporaryDirectory() as directory:
         scratch = Path(directory)
         init = scratch / "__init__.py"
         init.write_text("", encoding="utf-8")
-        sources = [(name, source_root / name) for name in SOURCES]
+        sources = [(name, source_root / name) for name in source_names]
         sources.append(("prototypes/__init__.py", init))
         with ZipFile(str(scratch / "diagnostic.zip"), "w", ZIP_DEFLATED) as archive:
             for name, source in sources:

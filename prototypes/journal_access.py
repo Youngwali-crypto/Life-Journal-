@@ -27,9 +27,9 @@ class JournalAccessState:
 
 
 class JournalAccess:
-    def __init__(self, path):
+    def __init__(self, path, *, store=None):
         self.path = str(path)
-        self.store = JsonJournalStore(path)
+        self.store = store if store is not None else JsonJournalStore(path)
 
     PRICE = 200
 
