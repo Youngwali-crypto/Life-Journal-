@@ -66,3 +66,32 @@ def diagnostics(_connection=None):
         output("Journal JSON write/read OK")
     except Exception as error:
         output("Journal JSON FAILED: {}: {}".format(type(error).__name__, error))
+
+
+@sims4.commands.Command("lifejournal.ordercheck", command_type=sims4.commands.CommandType.Live)
+def ordercheck(_connection=None):
+    """Report whether ordering tuning loaded and reached live computers."""
+    output = sims4.commands.CheatOutput(_connection)
+    try:
+        import services
+        from sims4.resources import Types
+        interaction_id = 15165149906037668690
+        manager = services.get_instance_manager(Types.INTERACTION)
+        tuning = manager.get(interaction_id)
+        output("Order tuning registered: {}".format(tuning is not None))
+        if tuning is None:
+            output("The package tuning did not load; check the package XML and script class.")
+            return
+        objects = services.object_manager()
+        computers = [obj for obj in objects.values()
+                     if "computer" in type(obj).__name__.lower()
+                     or "computer" in str(getattr(obj, "definition", "")).lower()]
+        output("Live computer candidates: {}".format(len(computers)))
+        for obj in computers[:5]:
+            normal = tuple(getattr(obj, "_super_affordances", ()) or ())
+            locked = tuple(getattr(obj, "super_affordances", ()) or ())
+            attached = any(getattr(a, "guid64", None) == interaction_id
+                           for a in normal + locked)
+            output("Computer {}: order attached {}".format(getattr(obj, "id", "?"), attached))
+    except Exception as error:
+        output("Order check FAILED: {}: {}".format(type(error).__name__, error))
