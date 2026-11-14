@@ -1,12 +1,13 @@
-"""Journal JSON stored in a hidden household so it follows game saves."""
+"""Journal JSON stored in S4CL's mod_data folder, keyed by game save ID."""
 from copy import deepcopy
 from prototypes.json_journal_store import JsonJournalStore
 
 
 class SavedJournalStore(JsonJournalStore):
     def __init__(self, identity, identifier, current):
-        from sims4communitylib.persistence.persistence_services.common_hidden_household_persistence_service import CommonHiddenHouseholdPersistenceService
-        self.service = CommonHiddenHouseholdPersistenceService()
+        from sims4communitylib.persistence.persistence_services.common_file_persistence_service import CommonFilePersistenceService
+        self.service = CommonFilePersistenceService(
+            per_save=False, custom_file_name='life_journal_{}.json'.format(identifier))
         self.identity = identity
         self.identifier = identifier
         self.current = current
