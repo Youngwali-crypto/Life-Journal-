@@ -103,3 +103,42 @@ class PaidOrderTests(TestCase):
         self.assertEqual(self.access.opening("save", "sim"), "journal")
         self.assertEqual(JournalStore(self.path).entries("save", "sim")[:len(previous)], previous)
         self.assertEqual(self.access.state("save", "sim").activated_at, 1981)
+
+    def test_overdue_beta_delivery_uses_existing_paid_order(self):
+        from unittest.mock import Mock
+        from prototypes.journal_access_dialogs import JournalAccessDialogs
+
+        original = self.order(10)
+        self.access = JournalAccess(self.path)
+        dialogs = Mock()
+        dialogs.journal.save_id = 'save'
+        dialogs.journal.sim_id = 'sim'
+        dialogs.clock.return_value = original.due_at
+        ui = JournalAccessDialogs(self.access, dialogs, 'house', 0,
+                                  debit_once=self.debit, beta_home_delivery=True)
+        ui.order()
+        self.assertEqual(dialogs._menu.call_args[0][0], 'Life Journal delivery is ready')
+        collect = dict(dialogs._menu.call_args[0][2])['Collect Journal']
+        collect()
+        collected = self.access.state('save', 'sim')
+        self.assertEqual(collected.receipt_id, original.order_id)
+        self.assertEqual(self.access.opening('save', 'sim'), 'setup')
+        collect()
+        self.assertEqual(self.access.state('save', 'sim'), collected)
+        self.assertEqual(self.balance, 300)
+        self.assertEqual(len(self.charges), 1)
+
+    def test_beta_delivery_waits_until_due(self):
+        from unittest.mock import Mock
+        from prototypes.journal_access_dialogs import JournalAccessDialogs
+
+        original = self.order(10)
+        dialogs = Mock()
+        dialogs.journal.save_id = 'save'
+        dialogs.journal.sim_id = 'sim'
+        dialogs.clock.return_value = original.due_at - 1
+        ui = JournalAccessDialogs(self.access, dialogs, 'house', 0,
+                                  debit_once=self.debit, beta_home_delivery=True)
+        ui.order()
+        self.assertEqual(dialogs._menu.call_args[0][0], 'Journal on its way')
+        self.assertIsNone(self.access.state('save', 'sim').received_at)
