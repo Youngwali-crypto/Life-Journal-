@@ -8,11 +8,13 @@ from .household_payment import PaymentUncertain
 
 
 class JournalAccessDialogs:
-    def __init__(self, access, dialogs, household_id, delivery_minutes, *, debit_once=None, planner_is_missing=None):
+    def __init__(self, access, dialogs, household_id, delivery_minutes, *, debit_once=None, planner_is_missing=None,
+                 beta_home_delivery=False):
         self.access, self.dialogs = access, dialogs
         self.household_id, self.delivery_minutes = household_id, delivery_minutes
         self.debit_once = debit_once
         self.planner_is_missing = planner_is_missing
+        self.beta_home_delivery = beta_home_delivery
         access._identity(household_id)
         access._time(delivery_minutes)
 
@@ -44,6 +46,15 @@ class JournalAccessDialogs:
         existing = self.access.state(journal.save_id, journal.sim_id)
         replacement_id = None
         if existing is not None:
+            if (self.beta_home_delivery and existing.received_at is None
+                    and existing.household_id == self.household_id
+                    and self.dialogs.clock() >= existing.due_at):
+                return self.dialogs._menu(
+                    'Life Journal delivery is ready',
+                    'Your order is due. Collect the beta Journal here while the physical book is being built.',
+                    [('Collect Journal', self._collect_beta_delivery),
+                     ('Later', lambda: None)],
+                )
             if not self._can_replace(existing):
                 return self.open()
             replacement_id = existing.order_id
@@ -79,6 +90,20 @@ class JournalAccessDialogs:
             return self.dialogs._menu("Insufficient funds",
                 "The household needs §{} to order Life Journal.".format(self.access.PRICE),
                 [("Back", self.open)])
+        return self.open()
+
+    def _collect_beta_delivery(self):
+        journal = self.dialogs.journal
+        journal._check()
+        if not self.beta_home_delivery:
+            return self.open()
+        order = self.access.state(journal.save_id, journal.sim_id)
+        if (order is None or order.household_id != self.household_id
+                or self.dialogs.clock() < order.due_at):
+            return self.open()
+        if order.received_at is None:
+            self.access.receive(journal.save_id, journal.sim_id, self.household_id,
+                                order.order_id, order.order_id, self.dialogs.clock())
         return self.open()
 
     def start_free(self):
