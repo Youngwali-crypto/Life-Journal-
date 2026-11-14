@@ -31,7 +31,7 @@ def build(output, computer_ids, display_key):
                          n=name, s=str(tuning_id(name)))
     phones = ET.SubElement(snippet, "L", n="add_interactions_to_phones")
     ET.SubElement(phones, "T").text = str(ids["Phone"])
-    objects = ET.SubElement(snippet, "L", n="add_interactions_to_objects")
+    objects = ET.SubElement(snippet, "L", n="add_lock_aware_interactions_to_lockable_objects")
     entry = ET.SubElement(objects, "U")
     if computer_ids:
         selection = ET.SubElement(entry, "V", n="object_selection", t="object_list")
@@ -40,10 +40,10 @@ def build(output, computer_ids, display_key):
         for object_id in sorted(set(computer_ids)):
             ET.SubElement(targets, "T").text = str(object_id)
     else:
-        selection = ET.SubElement(entry, "V", n="object_selection", t="objects_with_affordance")
-        selection = ET.SubElement(selection, "U", n="objects_with_affordance")
-        ET.SubElement(selection, "T", n="affordance").text = "99121"
-    affordances = ET.SubElement(entry, "L", n="_super_affordances")
+        selection = ET.SubElement(entry, "V", n="object_selection", t="objects_with_tag")
+        selection = ET.SubElement(selection, "U", n="objects_with_tag")
+        ET.SubElement(selection, "E", n="tag").text = "Func_Computer"
+    affordances = ET.SubElement(entry, "L", n="super_affordances")
     ET.SubElement(affordances, "T").text = str(ids["Computer"])
     ET.ElementTree(snippet).write(str(output / (name + ".xml")), encoding="utf-8", xml_declaration=True)
 
