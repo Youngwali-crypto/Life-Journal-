@@ -109,3 +109,38 @@ def ordercheck(_connection=None):
                     getattr(obj, "id", "?"), attribute, len(affordances), attached))
     except Exception as error:
         output("Order check FAILED: {}: {}".format(type(error).__name__, error))
+
+
+@sims4.commands.Command("lifejournal.orderstatus", command_type=sims4.commands.CommandType.Live)
+def orderstatus(_connection=None):
+    """Show the active Sim's saved order and the clock used for its due time."""
+    output = sims4.commands.CheatOutput(_connection)
+    try:
+        import services
+        from date_and_time import sim_ticks_per_day
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+        from life_journal_order_interaction import OrderLifeJournalInteraction
+        from life_journal_saved_store import SavedJournalStore
+        from prototypes.game_context import home_context, sim_minutes
+        from prototypes.journal_access import JournalAccess
+
+        identity = home_context(services)
+        sim = CommonSimUtils.get_active_sim_info()
+        if identity is None or sim is None:
+            output("Life Journal: select the ordering Sim on their home lot.")
+            return
+        current = session.guard()
+        access = JournalAccess(None, store=SavedJournalStore(
+            OrderLifeJournalInteraction.get_mod_identity(), 'journal_orders', current))
+        order = access.state(identity[0], str(sim.sim_id))
+        now = sim_minutes(services, sim_ticks_per_day())
+        if order is None:
+            output("Life Journal: no saved order for the selected Sim in this save.")
+            return
+        output("Life Journal clock: {} Sim minutes; due: {}; remaining: {}".format(
+            now, order.due_at, max(0, order.due_at - now)))
+        output("Order household matches home: {}; received: {}".format(
+            order.household_id == identity[1], order.received_at is not None))
+    except Exception as error:
+        output("Life Journal order status FAILED: {}: {}".format(
+            type(error).__name__, error))
