@@ -43,7 +43,7 @@ def bind_orders():
         resolver = order_dialog_resolver(access, identity[0], identity[1], clock, current,
             CommonHouseholdUtils.get_household_id, CommonSimNameUtils.get_full_name,
             lambda journal, owner, sim_clock: S4CLJournalDialogs(journal, mod, owner, sim_clock),
-            payment)
+            payment, beta_home_delivery=True)
         return resolver(actor)
     bind_order_dialogs(resolve)
     return True
