@@ -136,6 +136,13 @@ def orderstatus(_connection=None):
         now = sim_minutes(services, sim_ticks_per_day())
         if order is None:
             output("Life Journal: no saved order for the selected Sim in this save.")
+            with access.store.transaction(write=False) as data:
+                rows = list(data.get('orders', {}).values())
+            output("Stored orders: {}; selected Sim ID: {}".format(len(rows), sim.sim_id))
+            for row in rows[:8]:
+                output("Order owner: {}; same household: {}; same save: {}; due: {}".format(
+                    row.get('sim_id'), row.get('household_id') == identity[1],
+                    row.get('save_id') == identity[0], row.get('due_at')))
             return
         output("Life Journal clock: {} Sim minutes; due: {}; remaining: {}".format(
             now, order.due_at, max(0, order.due_at - now)))
