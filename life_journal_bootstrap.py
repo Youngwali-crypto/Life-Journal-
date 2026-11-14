@@ -7,7 +7,8 @@ from prototypes.sims4_journal_dialogs import S4CLJournalDialogs
 
 
 def order_dialog_resolver(access, save_id, household_id, clock, current, household_for,
-                          name_for, native_dialogs, debit_once, planner_is_missing=None):
+                          name_for, native_dialogs, debit_once, planner_is_missing=None,
+                          beta_home_delivery=False):
     """Return an actor-bound dialog resolver that rechecks identity on each action."""
     store = access.store
 
@@ -27,7 +28,8 @@ def order_dialog_resolver(access, save_id, household_id, clock, current, househo
                                    session_is_current=actor_is_current)
         return JournalAccessDialogs(access, native_dialogs(journal, sim, clock),
                                     household_id, 0, debit_once=debit_once,
-                                    planner_is_missing=planner_is_missing)
+                                    planner_is_missing=planner_is_missing,
+                                    beta_home_delivery=beta_home_delivery)
 
     return resolve
 
