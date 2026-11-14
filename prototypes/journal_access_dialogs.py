@@ -45,6 +45,13 @@ class JournalAccessDialogs:
             return self.open()
         existing = self.access.state(journal.save_id, journal.sim_id)
         replacement_id = None
+        if existing is None and self.beta_home_delivery:
+            return self.dialogs._menu(
+                'Life Journal order',
+                'If this Sim already paid §200 in an earlier beta build, restore that order without paying again.',
+                [('Restore Earlier Paid Order', self._restore_beta_order),
+                 ('New Order for §200', self._confirm_new_order)],
+            )
         if existing is not None:
             if (self.beta_home_delivery and existing.received_at is None
                     and existing.household_id == self.household_id
@@ -58,6 +65,9 @@ class JournalAccessDialogs:
             if not self._can_replace(existing):
                 return self.open()
             replacement_id = existing.order_id
+        return self._confirm_new_order(replacement_id)
+
+    def _confirm_new_order(self, replacement_id=None):
         price = self.access.PRICE
         return self.dialogs._menu(
             ("Order replacement Life Journal for §{}?" if replacement_id else
@@ -66,6 +76,14 @@ class JournalAccessDialogs:
             [("Place Order", lambda: self._place_paid_order(replacement_id)),
              ("Cancel", lambda: None)],
         )
+
+    def _restore_beta_order(self):
+        journal = self.dialogs.journal
+        journal._check()
+        if self.beta_home_delivery:
+            self.access.restore_paid_beta_order(journal.save_id, journal.sim_id,
+                                                self.household_id, self.dialogs.clock())
+        return self.order()
 
     def _can_replace(self, order):
         # Unknown or unloaded object state must never be treated as lost.
