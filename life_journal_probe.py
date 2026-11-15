@@ -37,13 +37,13 @@ def check_storage():
     from tempfile import TemporaryDirectory
 
     from prototypes.journal_entry_log import JournalEntry
-    from prototypes.journal_store import JournalStore
+    from prototypes.json_journal_store import JsonJournalStore
 
     with TemporaryDirectory(prefix="life-journal-probe-") as directory:
-        path = Path(directory) / "probe.db"
+        path = Path(directory) / "probe.json"
         entry = JournalEntry("probe", "player", "personal", "Probe", 0)
-        JournalStore(path).record_entry("probe-save", "probe-sim", entry)
-        if JournalStore(path).entries("probe-save", "probe-sim") != (entry,):
+        JsonJournalStore(path).record_entry("probe-save", "probe-sim", entry)
+        if JsonJournalStore(path).entries("probe-save", "probe-sim") != (entry,):
             raise RuntimeError("Journal entry did not round-trip")
 
 
@@ -63,6 +63,91 @@ def diagnostics(_connection=None):
         output("S4CL dialog imports FAILED: {}: {}".format(type(error).__name__, error))
     try:
         check_storage()
-        output("Journal SQLite write/read OK")
+        output("Journal JSON write/read OK")
     except Exception as error:
-        output("Journal SQLite FAILED: {}: {}".format(type(error).__name__, error))
+        output("Journal JSON FAILED: {}: {}".format(type(error).__name__, error))
+
+
+@sims4.commands.Command("lifejournal.ordercheck", command_type=sims4.commands.CommandType.Live)
+def ordercheck(_connection=None):
+    """Report whether ordering tuning loaded and reached live computers."""
+    output = sims4.commands.CheatOutput(_connection)
+    try:
+        import services
+        from sims4.resources import Types
+        interaction_id = 15165149906037668690
+        manager = services.get_instance_manager(Types.INTERACTION)
+        tuning = manager.get(interaction_id)
+        output("Order tuning registered: {}".format(tuning is not None))
+        if tuning is None:
+            output("The package tuning did not load; check the package XML and script class.")
+            return
+        objects = services.object_manager()
+        computers = [obj for obj in objects.values()
+                     if "computer" in type(obj).__name__.lower()
+                     or "computer" in str(getattr(obj, "definition", "")).lower()]
+        output("Live computer candidates: {}".format(len(computers)))
+        for obj in computers[:5]:
+            for attribute in ("_super_affordances", "super_affordances"):
+                value = getattr(obj, attribute, None)
+                if callable(value):
+                    try:
+                        value = value()
+                    except Exception as error:
+                        output("Computer {} {} callable: {}".format(
+                            getattr(obj, "id", "?"), attribute, type(error).__name__))
+                        continue
+                try:
+                    affordances = tuple(value or ())
+                except TypeError:
+                    output("Computer {} {} is {}".format(
+                        getattr(obj, "id", "?"), attribute, type(value).__name__))
+                    continue
+                attached = any(getattr(a, "guid64", None) == interaction_id
+                               or a == interaction_id for a in affordances)
+                output("Computer {} {}: {} entries; order attached {}".format(
+                    getattr(obj, "id", "?"), attribute, len(affordances), attached))
+    except Exception as error:
+        output("Order check FAILED: {}: {}".format(type(error).__name__, error))
+
+
+@sims4.commands.Command("lifejournal.orderstatus", command_type=sims4.commands.CommandType.Live)
+def orderstatus(_connection=None):
+    """Show the active Sim's saved order and the clock used for its due time."""
+    output = sims4.commands.CheatOutput(_connection)
+    try:
+        import services
+        from date_and_time import sim_ticks_per_day
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+        from life_journal_order_interaction import OrderLifeJournalInteraction
+        from life_journal_saved_store import SavedJournalStore
+        from prototypes.game_context import home_context, sim_minutes
+        from prototypes.journal_access import JournalAccess
+
+        identity = home_context(services)
+        sim = CommonSimUtils.get_active_sim_info()
+        if identity is None or sim is None:
+            output("Life Journal: select the ordering Sim on their home lot.")
+            return
+        current = session.guard()
+        access = JournalAccess(None, store=SavedJournalStore(
+            OrderLifeJournalInteraction.get_mod_identity(), 'journal_orders', current))
+        order = access.state(identity[0], str(sim.sim_id))
+        now = sim_minutes(services, sim_ticks_per_day())
+        if order is None:
+            output("Life Journal: no saved order for the selected Sim in this save.")
+            with access.store.transaction(write=False) as data:
+                rows = list(data.get('orders', {}).values())
+            output("Stored orders: {}; selected Sim ID: {}".format(len(rows), sim.sim_id))
+            for row in rows[:8]:
+                output("Order owner: {}; same household: {}; same save: {}; due: {}".format(
+                    row.get('sim_id'), row.get('household_id') == identity[1],
+                    row.get('save_id') == identity[0], row.get('due_at')))
+            return
+        output("Life Journal clock: {} Sim minutes; due: {}; remaining: {}".format(
+            now, order.due_at, max(0, order.due_at - now)))
+        output("Order household matches home: {}; received: {}".format(
+            order.household_id == identity[1], order.received_at is not None))
+    except Exception as error:
+        output("Life Journal order status FAILED: {}: {}".format(
+            type(error).__name__, error))

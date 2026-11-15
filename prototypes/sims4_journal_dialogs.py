@@ -4,7 +4,10 @@ Bootstrap supplies a verified SimInfo, current-session guard and Sim clock.
 No import-time registration; never auto-select a different Sim in callbacks.
 """
 
-import sqlite3
+try:
+    from sqlite3 import Error as StorageError
+except ImportError:
+    StorageError = OSError
 
 
 class S4CLJournalDialogs:
@@ -65,7 +68,7 @@ class S4CLJournalDialogs:
                 self.journal.save_entry(draft, text, self.clock())
             except ValueError as error:
                 return self.write_entry(draft, text or '', str(error))
-            except (OSError, sqlite3.Error):
+            except (OSError, StorageError):
                 return self.write_entry(draft, text or '', 'Could not save. Your draft is still here; try again.')
             return self.show_page('Personal Entries')
         dialog.show(sim_info=self.sim_info, on_submit=submitted)

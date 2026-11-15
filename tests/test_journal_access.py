@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 
 from prototypes.journal_access import JournalAccess
 from prototypes.journal_access_dialogs import JournalAccessDialogs
-from prototypes.journal_store import JournalStore
+from prototypes.json_journal_store import JsonJournalStore as JournalStore
 from prototypes.journal_interface import JournalInterface
 
 
@@ -59,7 +59,7 @@ class JournalAccessTests(TestCase):
 
     def test_failed_receipt_journal_write_rolls_back_and_retries(self):
         order = self.order()
-        with patch.object(JournalStore, 'record_entry', side_effect=RuntimeError('disk')):
+        with patch.object(JournalStore, 'record', side_effect=RuntimeError('disk')):
             with self.assertRaises(RuntimeError):
                 self.receive(order)
         self.assertIsNone(self.access.state('save', 'sim').received_at)
@@ -69,7 +69,7 @@ class JournalAccessTests(TestCase):
     def test_failed_activation_does_not_unlock(self):
         order = self.order()
         self.receive(order)
-        with patch.object(JournalStore, 'record_entry', side_effect=RuntimeError('disk')):
+        with patch.object(JournalStore, 'record', side_effect=RuntimeError('disk')):
             with self.assertRaises(RuntimeError):
                 self.access.start_free_journal('save', 'sim', 71)
         self.assertEqual(self.access.opening('save', 'sim'), 'setup')

@@ -31,7 +31,10 @@ class OrderLifeJournalInteraction(CommonSuperInteraction):
     def on_run(self, interaction_sim, interaction_target, timeline):
         binding = _order_dialogs
         if binding is None or not binding[0]():
-            return False
+            from life_journal_order_runtime import bind_orders
+            if not bind_orders():
+                return False
+            binding = _order_dialogs
         dialogs = binding[1](interaction_sim)
         if dialogs is None or not callable(dialogs.debit_once):
             return False

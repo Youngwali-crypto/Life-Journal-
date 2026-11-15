@@ -80,3 +80,86 @@ class PaidOrderTests(TestCase):
         self.assertEqual(len(self.charges), 1)
         computer.order()
         self.assertEqual(computer.dialogs._menu.call_args[0][0], "Journal on its way")
+
+    def test_replacement_charges_once_and_keeps_setup_and_history(self):
+        from prototypes.json_journal_store import JsonJournalStore as JournalStore
+
+        first = self.order(10)
+        self.access.receive("save", "sim", "house", first.order_id, "first-box", 1980)
+        self.access.start_free_journal("save", "sim", 1981)
+        previous = JournalStore(self.path).entries("save", "sim")
+        replace = lambda: self.access.order_paid("save", "sim", "house", 1982, self.debit,
+                                                replace_order_id=first.order_id)
+        with patch.object(self.access, "_record", side_effect=RuntimeError("disk")):
+            with self.assertRaises(RuntimeError):
+                replace()
+        replacement = replace()
+        self.assertNotEqual(replacement.order_id, first.order_id)
+        self.assertEqual(replacement.due_at, 3420)
+        self.assertEqual(replace(), replacement)
+        self.assertEqual(self.balance, 100)
+        self.assertEqual(self.access.opening("save", "sim"), "awaiting_delivery")
+        self.access.receive("save", "sim", "house", replacement.order_id, "new-box", 3420)
+        self.assertEqual(self.access.opening("save", "sim"), "journal")
+        self.assertEqual(JournalStore(self.path).entries("save", "sim")[:len(previous)], previous)
+        self.assertEqual(self.access.state("save", "sim").activated_at, 1981)
+
+    def test_overdue_beta_delivery_uses_existing_paid_order(self):
+        from unittest.mock import Mock
+        from prototypes.journal_access_dialogs import JournalAccessDialogs
+
+        original = self.order(10)
+        self.access = JournalAccess(self.path)
+        dialogs = Mock()
+        dialogs.journal.save_id = 'save'
+        dialogs.journal.sim_id = 'sim'
+        dialogs.clock.return_value = original.due_at
+        ui = JournalAccessDialogs(self.access, dialogs, 'house', 0,
+                                  debit_once=self.debit, beta_home_delivery=True)
+        ui.order()
+        self.assertEqual(dialogs._menu.call_args[0][0], 'Life Journal delivery is ready')
+        collect = dict(dialogs._menu.call_args[0][2])['Collect Journal']
+        collect()
+        collected = self.access.state('save', 'sim')
+        self.assertEqual(collected.receipt_id, original.order_id)
+        self.assertEqual(self.access.opening('save', 'sim'), 'setup')
+        collect()
+        self.assertEqual(self.access.state('save', 'sim'), collected)
+        self.assertEqual(self.balance, 300)
+        self.assertEqual(len(self.charges), 1)
+
+    def test_beta_delivery_waits_until_due(self):
+        from unittest.mock import Mock
+        from prototypes.journal_access_dialogs import JournalAccessDialogs
+
+        original = self.order(10)
+        dialogs = Mock()
+        dialogs.journal.save_id = 'save'
+        dialogs.journal.sim_id = 'sim'
+        dialogs.clock.return_value = original.due_at - 1
+        ui = JournalAccessDialogs(self.access, dialogs, 'house', 0,
+                                  debit_once=self.debit, beta_home_delivery=True)
+        ui.order()
+        self.assertEqual(dialogs._menu.call_args[0][0], 'Journal on its way')
+        self.assertIsNone(self.access.state('save', 'sim').received_at)
+
+    def test_lost_beta_order_can_be_restored_once_without_second_charge(self):
+        from unittest.mock import Mock
+        from prototypes.journal_access_dialogs import JournalAccessDialogs
+
+        dialogs = Mock()
+        dialogs.journal.save_id = 'save'
+        dialogs.journal.sim_id = 'sim'
+        dialogs.clock.return_value = 2000
+        ui = JournalAccessDialogs(self.access, dialogs, 'house', 0,
+                                  debit_once=self.debit, beta_home_delivery=True)
+        ui.order()
+        self.assertEqual(dialogs._menu.call_args[0][0], 'Life Journal order')
+        restore = dict(dialogs._menu.call_args[0][2])['Restore Earlier Paid Order']
+        restore()
+        self.assertEqual(dialogs._menu.call_args[0][0], 'Life Journal delivery is ready')
+        original = self.access.state('save', 'sim')
+        self.access = JournalAccess(self.path)
+        self.assertEqual(self.access.state('save', 'sim'), original)
+        self.assertEqual(self.access.restore_paid_beta_order('save', 'sim', 'house', 2001), original)
+        self.assertEqual(self.balance, 500)
